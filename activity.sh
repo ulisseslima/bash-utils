@@ -1,6 +1,7 @@
 #!/bin/bash
 
 nargs=$#
+resource=""
 
 if [ $nargs == 0 ]; then
   echo "no args were provided"
@@ -23,6 +24,9 @@ do
             ;;
         --stop) do_stop
             ;;
+        --user|-u) shift
+        	resource=$1
+        	;;
         --*) echo "bad option $1"
             ;;
         *) echo "Usage: $0 {start|stop|restart|force-reload}"
@@ -31,12 +35,5 @@ do
     shift
 done
 
-eu=15
-mateus=3
-
-#http://cvs.murah:5050/controleAtividades/apontamentoUsuarioHoje.do?idRecurso=3
-
-http://cvs.murah:5050/controleAtividades/login.jsp?j_username=mateus
-
-lynx -cmd_log=/home/wonka/bin/tmp/cvs.murah:5050 http://cvs.murah:5050/controleAtividades/apontamentoUsuarioHoje.do?idRecurso=15
+lynx -cmd_log=~/tmp/cvs.murah:5050 http://cvs.murah:5050/controleAtividades/apontamentoUsuarioHoje.do?idRecurso=$resource
 

@@ -1,57 +1,59 @@
 #!/bin/bash
 
-###########################
-# Cria um certificado para ser usado com o servidor da caixa
-# $1 nome do usuário
-# $2 senha (opcional)
-# $3 para dar override em $JAVA_HOME
-#
-# verificando que o alias está registrado:
-# keytool -list -keystore $myjavahome/jre/lib/security/cacerts
-# para cada cliente
-# keytool -import -noprompt -trustcacerts -alias sictd -file sictd.cer -keystore $myjavahome/jre/lib/security/cacerts -storepass changeit
-###########################
-
 set -e
 
-JBOSS_CERT_DIR=/home/wonka/proj/servers/jboss/caixa/server/teste/certificados
-USER=$1
+USER=`hostname`
 PASS=123456
-if [[ -n $2 ]]; then
-PASS="$2"
-fi
-if [[ -n $3 ]]; then
-JAVA_HOME="$3"
-fi
-
-# MODE:
-# 0: full. Creates a certificate for the server, exports it, the
 MODE=0
+JKS=false
+CACERTS_PASS=changeit
+JBOSS=""
 
-DIR_CACERTS="$JAVA_HOME"/jre/lib/security
-if [ ! -d "$DIR_CACERTS" ]; then
-  echo "Diretório do cacerts não existe: '$DIR_CACERTS'"
-  exit 1
+install_in_all_jres() {
+	echo "encontrando instalações do java..."
+	ALL_CACERTS=`sudo find / -wholename "*/jre/lib/security/cacerts" | sort -u`
+	echo "$ALL_CACERTS"
+	for java_cacerts in $ALL_CACERTS
+	do
+		echo "inserindo certificado no cacerts em $java_cacerts..."
+		sudo keytool -import -noprompt -trustcacerts -alias $USER -file ~/cacerts/$USER.cer -keystore $java_cacerts -storepass $CACERTS_PASS
+		echo "NOTA: você pode verificar se o certificado foi adicionado corretamente a essa instalação executando o comando keytool -list -keystore $java_home | grep $USER"
+	done
+}
+
+if [[ ! -n "$USER" ]]; then
+	echo "nome do alias é obrigatório, defina seu hostname ou forneça o parâmetro --alias"
+	exit 1
 fi
 
 while test $# -gt 0
 do
     case "$1" in
     	--help)
-    		echo "example: $0 -u user -p password --port 22"
+    		echo "examplo full:"
+    		echo "$0 --alias sictd --pass 123456 --jks --cacerts-pass 123456 --jboss /caminho/home/jboss"
+    		echo "examplo apenas instalação:"
+    		echo "$0 --alias sictd --cacerts-pass 123456 --install"
     		exit 0
-    	;;
-		--java|-j) shift
-			JAVA_HOME=$1
-        ;;
+    	;;		
 		--alias|-a) shift
 			USER=$1
         ;;
 		--pass|p) shift
 			PASS=$1			
         ;;
-        --client|-c) shift
-        	PORT_GT=$1
+        --jks)
+        	JKS=true
+        ;;
+        --cacerts-pass) shift
+        	CACERTS_PASS=$1
+        ;;
+        --jboss) shift
+        	JBOSS=$1
+        ;;
+        --install|-i) 
+	        install_in_all_jres
+        	exit 0
         ;;
 		--*) echo "bad option $1"
 			exit 1
@@ -60,25 +62,35 @@ do
     shift
 done
 
-cd ~
-keytool -genkey -alias $USER -keyalg RSA -keystore $USER.keystore -storepass $PASS -keypass $PASS -dname "CN=$USER, OU=CONTEXPRESS, O=MURAH, L=SAOPAULO, ST=SP, C=BR"
+mkdir -p ~/cacerts
 
-echo "exportando o certificado com o alias no alias.keystore..."
-keytool -export -alias $USER -keystore $USER.keystore -storepass $PASS -file $USER.cer
+echo "usando alias '$USER' e senha '$PASS'..."
 
-cd "$DIR_CACERTS"
-echo "senha padrão do cacerts: changeit"
-keytool -import -file ~/$USER.cer -alias $USER -keystore cacerts
+echo "gerando certificado e keystore..."
+keytool -genkey -alias $USER -keyalg RSA -keystore ~/cacerts/$USER.keystore -storepass $PASS -keypass $PASS -dname "CN=$USER, OU=CONTEXPRESS, O=MURAH, L=SAOPAULO, ST=SP, C=BR"
 
-cd ~
-echo "Gerando jks para conexão com o desktop"
-keytool -import -file ~/$USER.cer -alias $USER -keystore sictd.jks
+echo "exportando o certificado no keystore..."
+keytool -export -alias $USER -keystore ~/cacerts/$USER.keystore -storepass $PASS -file ~/cacerts/$USER.cer
 
-echo "concluído."
-echo "certifique-se de que o nome $USER está definido como alias do 127.0.0.1 no arquivo hosts"
+if [ "$JKS" == "true" ]; then
+	echo "gerando jks para conexão com o desktop..."
+	keytool -import -file ~/cacerts/$USER.cer -alias $USER -keystore sictd.jks
+fi
+
+if [[ -n "$JBOSS" ]]; then
+	mkdir -p "$JBOSS/cacerts"
+	cp ~/cacerts/$USER.keystore "$JBOSS/cacerts"
+	echo "<!-- HTTPS -->
+   	<Connector port=\"8443\" protocol=\"HTTP/1.1\" SSLEnabled=\"true\"
+       maxThreads=\"1500\" scheme=\"https\" secure=\"true\"
+       clientAuth=\"false\" sslProtocol=\"TLS\"
+       address=\"\${jboss.bind.address}\" strategy=\"ms\"
+       keystoreFile=\"$JBOSS/cacerts/$USER.keystore\"
+       keystorePass=\"$PASS\" />" > ~/cacerts/server.xml.snippet
+    echo "exemplo de connector do Jboss criado em ~/cacerts/server.xml.snippet"
+fi
+
+install_in_all_jres
+
+echo "testando conectividade do alias selecionado..."
 ping -c 3 $USER
-
-echo "copying certificate to jboss dir"
-cp $USER.keystore $JBOSS_CERT_DIR
-
-keytool -import -noprompt -trustcacerts -alias sictd -file sictd.cer -keystore $myjavahome/jre/lib/security/cacerts -storepass changeit
