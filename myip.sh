@@ -1,8 +1,8 @@
 #!/bin/bash
 
 SSH_PORT=22
-SSH_USER=ulisses
-SSH_PASS=murah
+SSH_USER=
+SSH_PASS=
 # only try ips greater than this number:
 PORT_GT=0
 

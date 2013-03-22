@@ -13,4 +13,3 @@ case $join_type in
 		;;
 esac
 
-

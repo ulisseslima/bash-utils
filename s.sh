@@ -1,11 +1,11 @@
 #!/bin/bash
 
 do_start() {
-	sshpass -p murah scp ulisses@murah.com:/home/ulisses/$1 $2
+	sshpass -p $USER_PROXY_PW scp $USER_PROXY@$PROXY_HOST:$USER_PROXY_HOME/$1 $2
 }
 
 do_ssh() {
-	sshpass -p murah ssh ulisses@murah.com
+	sshpass -p $USER_PROXY_PW ssh $USER_PROXY@$PROXY_HOST
 }
 
 while test $# -gt 0
