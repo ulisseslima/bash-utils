@@ -6,34 +6,52 @@ import="java.util"
 static_import="java.lang.System
 java.util.Collections"
 
+echo_imports() {
+	for i in $import
+	do
+		echo "import $i.*;"
+	done
+}
+
+echo_static_imports() {
+	for is in $static_import
+	do
+		echo "import static $is.*;"
+	done
+}
+
 if [ "$code" == "--help" ]; then
 	echo "Executes arbitrary Java code in a 'public static void main' context, with some implicit helper variables/methods, like println and sleep"
 	echo "The following imports are built in:"
-	echo "java.util.*"
-	echo "static java.util.Collections.*"
-	echo "static java.lang.System.*"
+	echo_imports
+	echo ""
+	echo "The following static imports are built in:"
+	echo_static_imports
+	echo ""
+	echo "You can pass arguments after the code, and access them with a[0] and so on."
 	exit 0
 fi
 
 echo "//`date`" > $tmp_java
-
-for i in $import
-do
-	echo "import $i.*;" >> $tmp_java
-done
-
-for is in $static_import
-do
-	echo "import static $is.*;" >> $tmp_java
-done
-
+echo_imports >> $tmp_java
+echo_static_imports >> $tmp_java
 echo "
 public class InlineJava {
-	public static void main(String... args) {
+	public static void main(String... a) {
 		$code
 	}	
-	public static void print(Object object) {out.print(object);}
-	public static void println(Object object) {out.println(object);}
+	public static void print(Object object) {
+		if (object.getClass().isArray()) out.print(Arrays.toString((Object[]) object));
+		else out.print(object);
+	}
+	public static void println(Object object) {
+		if (object.getClass().isArray()) out.println(Arrays.toString((Object[]) object));
+		else out.println(object);
+	}
+	public static void split(Object object, String separator) {
+		println(object.toString().split(separator));
+	}
+	public static void split(Object object, char... separator) {split(object, String.valueOf(separator));}
 	public static void printf(String msg, Object... args) {out.printf(msg, args);}
 	public static void sleep(long millis) {
 		try {Thread.sleep(millis);}
@@ -43,6 +61,7 @@ public class InlineJava {
 
 javac $tmp_java
 tmp_sans_java=${tmp_java/'.java'/''}
-java -cp . $tmp_sans_java
+shift
+java -cp . $tmp_sans_java $@
 rm $tmp_sans_java*
 
