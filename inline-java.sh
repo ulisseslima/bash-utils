@@ -29,6 +29,9 @@ if [ "$code" == "--help" ]; then
 	echo_static_imports
 	echo ""
 	echo "You can pass arguments after the code, and access them with a[0] and so on."
+	echo ""
+	echo "Utility methods:"
+	echo "split(Object, String|char...); // splits the string representation of the object using the passed string or array of chars and prints the result"
 	exit 0
 fi
 
