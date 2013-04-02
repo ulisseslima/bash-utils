@@ -16,12 +16,12 @@ install_in_all_jres() {
 	for java_cacerts in $ALL_CACERTS
 	do
 		echo "inserindo certificado no cacerts em $java_cacerts..."
-		sudo keytool -import -noprompt -trustcacerts -alias $USER -file ~/cacerts/$USER.cer -keystore $java_cacerts -storepass $CACERTS_PASS
-		echo "NOTA: você pode verificar se o certificado foi adicionado corretamente a essa instalação executando o comando keytool -list -keystore $java_home | grep $USER"
+		sudo keytool -import -noprompt -trustcacerts -alias $ALIAS -file ~/cacerts/$ALIAS.cer -keystore $java_cacerts -storepass $CACERTS_PASS
+		echo "NOTA: você pode verificar se o certificado foi adicionado corretamente a essa instalação executando o comando keytool -list -keystore $java_home | grep $ALIAS"
 	done
 }
 
-if [[ ! -n "$USER" ]]; then
+if [[ ! -n "$ALIAS" ]]; then
 	echo "nome do alias é obrigatório, defina seu hostname ou forneça o parâmetro --alias"
 	exit 1
 fi
@@ -64,28 +64,28 @@ done
 
 mkdir -p ~/cacerts
 
-echo "usando alias '$USER' e senha '$PASS'..."
+echo "usando alias '$ALIAS' e senha '$PASS'..."
 
 echo "gerando certificado e keystore..."
-keytool -genkey -alias $USER -keyalg RSA -keystore ~/cacerts/$USER.keystore -storepass $PASS -keypass $PASS -dname "CN=$USER, OU=CONTEXPRESS, O=MURAH, L=SAOPAULO, ST=SP, C=BR"
+keytool -genkey -alias $ALIAS -keyalg RSA -keystore ~/cacerts/$ALIAS.keystore -storepass $PASS -keypass $PASS -dname "CN=$ALIAS, OU=CONTEXPRESS, O=MURAH, L=SAOPAULO, ST=SP, C=BR"
 
 echo "exportando o certificado no keystore..."
-keytool -export -alias $USER -keystore ~/cacerts/$USER.keystore -storepass $PASS -file ~/cacerts/$USER.cer
+keytool -export -alias $ALIAS -keystore ~/cacerts/$ALIAS.keystore -storepass $PASS -file ~/cacerts/$ALIAS.cer
 
 if [ "$JKS" == "true" ]; then
 	echo "gerando jks para conexão com o desktop..."
-	keytool -import -file ~/cacerts/$USER.cer -alias $USER -keystore sictd.jks
+	keytool -import -file ~/cacerts/$ALIAS.cer -alias $ALIAS -keystore sictd.jks
 fi
 
 if [[ -n "$JBOSS" ]]; then
 	mkdir -p "$JBOSS/cacerts"
-	cp ~/cacerts/$USER.keystore "$JBOSS/cacerts"
+	cp ~/cacerts/$ALIAS.keystore "$JBOSS/cacerts"
 	echo "<!-- HTTPS -->
    	<Connector port=\"8443\" protocol=\"HTTP/1.1\" SSLEnabled=\"true\"
        maxThreads=\"1500\" scheme=\"https\" secure=\"true\"
        clientAuth=\"false\" sslProtocol=\"TLS\"
        address=\"\${jboss.bind.address}\" strategy=\"ms\"
-       keystoreFile=\"$JBOSS/cacerts/$USER.keystore\"
+       keystoreFile=\"$JBOSS/cacerts/$ALIAS.keystore\"
        keystorePass=\"$PASS\" />" > ~/cacerts/server.xml.snippet
     echo "exemplo de connector do Jboss criado em ~/cacerts/server.xml.snippet"
 fi
@@ -93,4 +93,4 @@ fi
 install_in_all_jres
 
 echo "testando conectividade do alias selecionado..."
-ping -c 3 $USER
+ping -c 3 $ALIAS
