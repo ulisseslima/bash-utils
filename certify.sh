@@ -11,13 +11,15 @@ JBOSS=""
 
 install_in_all_jres() {
 	echo "encontrando instalações do java..."
-	ALL_CACERTS=`sudo find / -wholename "*/jre/lib/security/cacerts" | sort -u`
+	#TODO find a faster way to list java instalaltions
+	ALL_CACERTS=`sudo find / -wholename "*/lib/security/cacerts" | sort -u`
 	echo "$ALL_CACERTS"
 	for java_cacerts in $ALL_CACERTS
 	do
 		echo "inserindo certificado no cacerts em $java_cacerts..."
 		sudo keytool -import -noprompt -trustcacerts -alias $ALIAS -file ~/cacerts/$ALIAS.cer -keystore $java_cacerts -storepass $CACERTS_PASS
-		echo "NOTA: você pode verificar se o certificado foi adicionado corretamente a essa instalação executando o comando keytool -list -keystore $java_home | grep $ALIAS"
+		echo "NOTA: você pode verificar se o certificado foi adicionado corretamente a essa instalação executando o comando:"
+		echo "keytool -list -keystore $java_home -storepass $CACERTS_PASS | grep $ALIAS"
 	done
 }
 
@@ -74,7 +76,7 @@ keytool -export -alias $ALIAS -keystore ~/cacerts/$ALIAS.keystore -storepass $PA
 
 if [ "$JKS" == "true" ]; then
 	echo "gerando jks para conexão com o desktop..."
-	keytool -import -file ~/cacerts/$ALIAS.cer -alias $ALIAS -keystore sictd.jks
+	keytool -import -file ~/cacerts/$ALIAS.cer -alias $ALIAS -keystore $ALIAS.jks
 fi
 
 if [[ -n "$JBOSS" ]]; then

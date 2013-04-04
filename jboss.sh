@@ -41,12 +41,14 @@ do_start_all() {
 	echo "starting all on $INSTANCES..."
 	while read jb_home
 	do
+		[[ "$jb_home" =~ ^#.*$ ]] && continue
 		start $jb_home
 	done < "$INSTANCES"
 }
 do_stop_all() {
 	while read jb_home
 	do
+		[[ "$jb_home" =~ ^#.*$ ]] && continue
 		stop $jb_home
 	done < "$INSTANCES"
 	sleep 5
