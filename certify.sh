@@ -7,6 +7,7 @@ PASS=123456
 MODE=0
 JKS=false
 CACERTS_PASS=changeit
+VALID_DAYS=3560
 JBOSS=""
 
 install_in_all_jres() {
@@ -47,6 +48,9 @@ do
         --jks)
         	JKS=true
         ;;
+        --validity) shift
+        	VALID_DAYS=$1
+        ;;        
         --cacerts-pass) shift
         	CACERTS_PASS=$1
         ;;
@@ -69,7 +73,7 @@ mkdir -p ~/cacerts
 echo "usando alias '$ALIAS' e senha '$PASS'..."
 
 echo "gerando certificado e keystore..."
-keytool -genkey -alias $ALIAS -keyalg RSA -keystore ~/cacerts/$ALIAS.keystore -storepass $PASS -keypass $PASS -dname "CN=$ALIAS, OU=CONTEXPRESS, O=MURAH, L=SAOPAULO, ST=SP, C=BR"
+keytool -genkey -alias $ALIAS -keyalg RSA -validity $VALID_DAYS -keystore ~/cacerts/$ALIAS.keystore -storepass $PASS -keypass $PASS -dname "CN=$ALIAS, OU=CONTEXPRESS, O=MURAH, L=SAOPAULO, ST=SP, C=BR"
 
 echo "exportando o certificado no keystore..."
 keytool -export -alias $ALIAS -keystore ~/cacerts/$ALIAS.keystore -storepass $PASS -file ~/cacerts/$ALIAS.cer
