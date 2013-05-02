@@ -32,6 +32,7 @@ do
     shift
 done
 
+echo "mapping..."
 active_ips=`nmap -sP 192.168.0.0/24 | grep 192 | cut -d' ' -f5`
 echo "will try to find ip for user $SSH_USER with pass $SSH_PASS"
 if [ $PORT_GT > 0 ]; then
