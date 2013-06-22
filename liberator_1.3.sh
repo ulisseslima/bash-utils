@@ -34,7 +34,7 @@ LPT_DOC_NAME=LPT_ConteXpress_Caixa-Server_${LPT_DATE}_v1.doc
 LPT_DUMMY_NAME=LPT_ConteXpress_Caixa-Server_yyyy-mm-dd_v1.doc
 
 # Versão do projeto conforme o pom em $SERVER_DIR
-PROJECT_VERSION=`xml sel -N x=http://maven.apache.org/POM/4.0.0 -t -v "/x:project/x:version" "$SERVER_DIR"/pom.xml`
+PROJECT_VERSION=`xmlstarlet sel -N x=http://maven.apache.org/POM/4.0.0 -t -v "/x:project/x:version" "$SERVER_DIR"/pom.xml`
 
 # Prefixo para versão de tags
 TAG_PREFIX=P354_
