@@ -2,7 +2,7 @@
 
 tmp_java=InlineJava.java
 code="$1"
-import="java.util"
+import='java.util java.text'
 static_import="java.lang.System
 java.util.Collections"
 
@@ -35,6 +35,8 @@ if [ "$code" == "--help" ]; then
 	exit 0
 fi
 
+t1=`date +%s%N | cut -b1-13`
+
 echo "//`date`" > $tmp_java
 echo_imports >> $tmp_java
 echo_static_imports >> $tmp_java
@@ -42,7 +44,7 @@ echo "
 public class InlineJava {
 	public static void main(String... a) {
 		$code
-	}	
+	}
 	public static void print(Object object) {
 		if (object.getClass().isArray()) out.print(Arrays.toString((Object[]) object));
 		else out.print(object);
@@ -63,6 +65,12 @@ public class InlineJava {
 }" >> $tmp_java
 
 javac $tmp_java
+
+t2=`date +%s%N | cut -b1-13`
+millis_elapsed=$((t2-t1))
+echo "compiled in $millis_elapsed ms."
+echo ""
+
 tmp_sans_java=${tmp_java/'.java'/''}
 shift
 java -cp . $tmp_sans_java $@
