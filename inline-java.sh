@@ -3,8 +3,7 @@
 tmp_java=InlineJava.java
 code="$1"
 import='java.util java.text'
-static_import="java.lang.System
-java.util.Collections"
+static_import="java.lang.System java.util.Collections"
 
 echo_imports() {
 	for i in $import

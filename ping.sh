@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [ "$1" == '--help' ]; then
+	echo "usage:"
+	echo "$0 host.name"
+	echo "or, to set an interval (in seconds) different to the default of 60 seconds:"
+	echo "$0 host.name 10"
+	exit 0
+fi
+
 hosto=cvs.murah
 if [[ -n $1 ]]; then
         hosto=$1
