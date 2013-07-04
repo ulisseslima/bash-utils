@@ -6,6 +6,7 @@ SSH_PASS=
 # only try ips greater than this number:
 PORT_GT=0
 DEBUG=0
+interactive=false
 
 debug() {
 	if [ $DEBUG -gt 0 ]; then
@@ -23,6 +24,9 @@ do
 		--password|-p) shift
 			SSH_PASS=$1
         ;;
+	--interactive|-i)
+		interactive=true
+	;;
         --debug)
         	DEBUG=1
         	debug "debug is active"
@@ -31,7 +35,7 @@ do
 			SSH_USER=$1
         ;;
 		--port) shift
-			SSH_PORT=$1			
+			SSH_PORT=$1
         ;;
         --start|--gt|-g) shift
         	PORT_GT=$1
@@ -51,7 +55,7 @@ if [ $PORT_GT -gt 0 ]; then
 fi
 
 for ip in $active_ips
-do		
+do
 	ip_n=`echo $ip | cut -d. -f4`
 	debug "$ip ($ip_n)"
 	if [[ $ip_n > $PORT_GT || ! -n $ip_n ]]; then
@@ -59,11 +63,20 @@ do
 		nc -z $ip $SSH_PORT 1>/dev/null 2>&1; result=$?;
 		if [ $result -eq 0 ]; then
 			echo "trying $ip..."
-			success=`sshpass -p $SSH_PASS ssh $SSH_USER@$ip "echo OK"`
-			if [ "$success" == "OK" ]; then
-				echo "
-				$ip OK
-				"
+			if [ $interactive == false ]; then
+				success=`sshpass -p $SSH_PASS ssh $SSH_USER@$ip "echo OK"`
+				if [ "$success" == "OK" ]; then
+					echo "
+					$ip OK
+					"
+				fi
+			else
+				success=`ssh $SSH_USER@$ip "echo OK"`
+                                if [ "$success" == "OK" ]; then
+                                        echo "
+                                        $ip OK
+                                        "
+                                fi
 			fi
 		fi
 	fi

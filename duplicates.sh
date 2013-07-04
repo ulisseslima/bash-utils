@@ -3,6 +3,11 @@
 verbose=false
 limit=0
 file="$1"
+if [ ! -f "$file" ]; then
+	echo "first argument must be a file."
+	exit 1
+fi
+
 shift
 
 do_help() {
@@ -32,7 +37,7 @@ do
     	--verbose|-v|--debug)
     		verbose=true
     	;;
-        --limit) 
+        --limit)
         	shift
         	limit=$1
         	debug "limit set to $limit"
