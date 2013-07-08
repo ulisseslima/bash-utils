@@ -5,6 +5,14 @@ code="$1"
 import='java.util java.text'
 static_import="java.lang.System java.util.Collections"
 
+os=`uname`
+pathseparator=':'
+fileseparator='/'
+if [[ "$os" == *'NT'* ]]; then
+	pathseparator=';'
+	fileseparator='\'
+fi
+
 echo_imports() {
 	for i in $import
 	do
@@ -18,7 +26,7 @@ echo_static_imports() {
 		echo "import static $is.*;"
 	done
 
-	if [ -f "$USR_LIB"/cuber.jar ]; then
+	if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
         	echo "import static com.dvlcube.cuber.Cuber.*;"
 	fi
 }
@@ -67,8 +75,8 @@ public class InlineJava {
 	}
 }" >> $tmp_java
 
-if [ -f "$USR_LIB"/cuber.jar ]; then
-	javac -cp "$USR_LIB"/cuber.jar:. $tmp_java
+if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
+	javac -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_java
 else
 	javac $tmp_java
 fi
@@ -81,8 +89,8 @@ echo ""
 tmp_sans_java=${tmp_java/'.java'/''}
 shift
 
-if [ -f "$USR_LIB"/cuber.jar ]; then
-        java -cp "$USR_LIB"/cuber.jar:. $tmp_sans_java $@
+if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
+        java -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_sans_java $@
 else
 	java -cp . $tmp_sans_java $@
 fi
