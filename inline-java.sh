@@ -17,6 +17,10 @@ echo_static_imports() {
 	do
 		echo "import static $is.*;"
 	done
+
+	if [ -f "$USR_LIB"/cuber.jar ]; then
+        	echo "import static com.dvlcube.cuber.Cuber.*;"
+	fi
 }
 
 if [ "$code" == "--help" ]; then
@@ -63,7 +67,11 @@ public class InlineJava {
 	}
 }" >> $tmp_java
 
-javac $tmp_java
+if [ -f "$USR_LIB"/cuber.jar ]; then
+	javac -cp "$USR_LIB"/cuber.jar:. $tmp_java
+else
+	javac $tmp_java
+fi
 
 t2=`date +%s%N | cut -b1-13`
 millis_elapsed=$((t2-t1))
@@ -72,6 +80,11 @@ echo ""
 
 tmp_sans_java=${tmp_java/'.java'/''}
 shift
-java -cp . $tmp_sans_java $@
+
+if [ -f "$USR_LIB"/cuber.jar ]; then
+        java -cp "$USR_LIB"/cuber.jar:. $tmp_sans_java $@
+else
+	java -cp . $tmp_sans_java $@
+fi
 rm $tmp_sans_java*
 
