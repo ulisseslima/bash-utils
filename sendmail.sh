@@ -76,6 +76,10 @@ do
     shift
 done
 
+if [ $passw == 'unspecified' ]; then
+	read -s -p "Password for $user: " passw
+fi
+
 echo "sending mail to $to..."
 
 java -jar \
