@@ -2,7 +2,7 @@
 
 tmp_java=InlineJava.java
 code="$1"
-import='java.util java.text'
+import='java.util java.text java.io'
 static_import="java.lang.System java.util.Collections"
 
 os=`uname`
@@ -39,7 +39,7 @@ if [ "$code" == "--help" ]; then
 	echo "The following static imports are built in:"
 	echo_static_imports
 	echo ""
-	echo "You can pass arguments after the code, and access them with a[0] and so on."
+	echo "You can pass arguments after the code, and access them with a[0] and so on. Input from stdin is stored in a string called stdin."
 	echo ""
 	echo "Utility methods:"
 	echo "split(Object, String|char...); // splits the string representation of the object using the passed string or array of chars and prints the result"
@@ -54,6 +54,10 @@ echo_static_imports >> $tmp_java
 echo "
 public class InlineJava {
 	public static void main(String... a) {
+		String stdin = \"\";
+		StringBuilder stdinBuilder = new StringBuilder();
+		try{BufferedReader br=new BufferedReader(new InputStreamReader(System.in));if(br.ready())while((stdin=br.readLine())!=null){stdinBuilder.append(stdin);}}catch(IOException io){io.printStackTrace();}
+		stdin = stdinBuilder.toString();
 		$code
 	}
 	public static void print(Object object) {
@@ -95,4 +99,3 @@ else
 	java -cp . $tmp_sans_java $@
 fi
 rm $tmp_sans_java*
-

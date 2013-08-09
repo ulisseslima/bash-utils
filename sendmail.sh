@@ -1,5 +1,8 @@
 #!/bin/bash
 
+MYSELF="$(readlink -f "$0")"
+MYDIR="${MYSELF%/*}"
+
 verbose=false
 
 server="smtp.gmail.com"
@@ -76,7 +79,7 @@ do
     shift
 done
 
-if [ $passw == 'unspecified' ]; then
+if [ "$passw" == 'unspecified' ]; then
 	read -s -p "Password for $user: " passw
 fi
 
@@ -92,4 +95,4 @@ java -jar \
 -Dpassword="$passw" \
 -Dsubject="$subject" \
 -Dmessage="$message" \
-sendmail.jar
+$MYDIR/sendmail.jar
