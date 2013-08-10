@@ -1,7 +1,13 @@
 #!/bin/bash
 
+MYSELF="$(readlink -f "$0")"
+MYDIR="${MYSELF%/*}"
+verbose=false
+
 tmp_java=InlineJava.java
 code="$1"
+shift
+args=""
 import='java.util java.text java.io'
 static_import="java.lang.System java.util.Collections"
 
@@ -31,8 +37,10 @@ echo_static_imports() {
 	fi
 }
 
-if [ "$code" == "--help" ]; then
-	echo "Executes arbitrary Java code in a 'public static void main' context, with some implicit helper variables/methods, like println and sleep"
+do_help() {
+	echo "Executes arbitrary Java code in a 'public static void main' context, with some implicit helper variables/methods, like println and sleep."
+	echo "The code to run must be the first argument."
+	echo ""
 	echo "The following imports are built in:"
 	echo_imports
 	echo ""
@@ -42,9 +50,31 @@ if [ "$code" == "--help" ]; then
 	echo "You can pass arguments after the code, and access them with a[0] and so on. Input from stdin is stored in a string called stdin."
 	echo ""
 	echo "Utility methods:"
-	echo "split(Object, String|char...); // splits the string representation of the object using the passed string or array of chars and prints the result"
-	exit 0
-fi
+	echo "split(Object, String|char...); // splits the string representation of the object using the passed string or array of chars and prints the result."
+}
+
+debug() {
+	if [ $verbose == "true" ]; then
+		echo "$1"
+	fi
+}
+
+while test $# -gt 0
+do
+    case "$1" in
+        --verbose|-v|--debug) 
+        	verbose=true
+        ;;
+        --help|-h)
+        	do_help
+        	exit 0
+        ;;
+	    *)
+        	args=$args$1" "
+	    ;;
+    esac
+    shift
+done
 
 t1=`date +%s%N | cut -b1-13`
 
@@ -85,17 +115,19 @@ else
 	javac $tmp_java
 fi
 
-t2=`date +%s%N | cut -b1-13`
-millis_elapsed=$((t2-t1))
-echo "compiled in $millis_elapsed ms."
-echo ""
+if [ $verbose = "true" ]; then
+	t2=`date +%s%N | cut -b1-13`
+	millis_elapsed=$((t2-t1))
+	echo "compiled in $millis_elapsed ms."
+	echo ""
+fi
 
 tmp_sans_java=${tmp_java/'.java'/''}
 shift
 
 if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
-        java -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_sans_java $@
+        java -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_sans_java $args
 else
-	java -cp . $tmp_sans_java $@
+	java -cp . $tmp_sans_java $args
 fi
 rm $tmp_sans_java*
