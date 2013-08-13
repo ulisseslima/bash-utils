@@ -2,13 +2,6 @@
 
 verbose=false
 limit=0
-file="$1"
-if [ ! -f "$file" ]; then
-	echo "first argument must be a file."
-	exit 1
-fi
-
-shift
 
 do_help() {
 	echo "prints duplicate lines in a file"
@@ -17,8 +10,7 @@ do_help() {
 	echo "	$0 file [options]"
 	echo ""
 	echo "options:"
-	echo "	--limit"
-	echo "	Limits the number of characters used for comparison. Useful for cvs files where only the first column should be compared."
+	echo "	--limit		Limits the number of characters used for comparison. Useful for cvs files where only the first column should be compared."
 }
 
 debug() {
@@ -26,6 +18,18 @@ debug() {
 		echo "$1"
 	fi
 }
+
+if [ "$1" == '--help' ]; then
+	do_help
+	exit 1
+fi
+
+file="$1"
+if [ ! -f "$file" ]; then
+	echo "first argument must be a file."
+	exit 1
+fi
+shift
 
 while test $# -gt 0
 do
