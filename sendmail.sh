@@ -8,6 +8,7 @@ verbose=false
 server="smtp.gmail.com"
 port=465
 ssl=true
+tls=false
 from="unspecified"
 to=$from
 user="unpecified"
@@ -45,6 +46,10 @@ do
         	shift
         	ssl=$1        	
         ;;
+	--tls)
+		shift
+		tls=$1
+	;;
         --from|-f) 
         	shift
         	from=$1
@@ -84,11 +89,20 @@ if [ "$passw" == 'unspecified' ]; then
 fi
 
 echo "sending mail to $to..."
+if [ $verbose == true ]; then
+	echo "server $server"
+	echo "port $port"
+	echo "ssl $ssl"
+	echo "from $from"
+	echo "user $user"
+	echo "message $message"
+fi
 
 java -jar \
 -Dserver=$server \
 -Dport=$port \
 -Dssl=$ssl \
+-Dtls=$tls \
 -Dfrom="$from" \
 -Dto="$to" \
 -Duser="$user" \
