@@ -10,11 +10,15 @@ debug() {
 
 do_help() {
 	echo "Options: "
-	echo "--trim file"	
-	echo "--trim-all 'filepattern'"
-	echo "--rm-bg file"	
-	echo "--rm-gb-all 'filepattern'"
 	echo "--verbose|-v to activate verbosity"
+	echo ""
+	echo "--trim file"
+	echo "--trim-all 'filepattern'"
+	echo "--rm-bg file"
+	echo "--rm-gb-all 'filepattern'"
+	echo "--resize 64x64 file #will keep aspect ratio"
+	echo "--resize 64x64\! file #will ignore aspect ratio"
+	echo "--resize 50% file"
 }
 
 # This will fill pixels similar in color to the pixel at x=0 and y=0. We use a fuzz setting of 1% to make colors similar to the background transparent.
@@ -34,7 +38,7 @@ do_remove_bg_collection() {
 	debug "using file pattern $pattern"
 
 	for f in $pattern
-	do		
+	do
 		do_remove_bg "$f"
 	done
 }
@@ -52,6 +56,24 @@ do_trim_collection() {
 	for f in $pattern
 	do
 		do_trim "$f"
+	done
+}
+
+do_resize() {
+	option="$1"
+	file="$2"
+	debug "resizing file $file to $option"
+	convert "$file" -resize $option "${option}-${file}"
+}
+
+do_resize_collection() {
+	option="$1"
+	pattern="$2"
+	debug "resizing all files that match $pattern to $option"
+
+	for f in $pattern
+	do
+		do_resize $option "$f"
 	done
 }
 
@@ -77,7 +99,15 @@ do
     ;;
     --rm-bg-all) shift
 	    do_remove_bg_collection "$1"
-    ;;    
+    ;;
+    --resize)
+	shift
+	option="$1"
+	shift
+	file="$1"
+
+	do_resize $option "$file"
+    ;;
     --*) echo "bad option $1"
     ;;
     esac
