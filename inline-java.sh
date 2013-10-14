@@ -3,9 +3,14 @@
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 verbose=false
+debug=false
 
 tmp_java=InlineJava.java
-code="$1"
+if [ -f "$1" ]; then
+	code="`cat $1`"
+else
+	code="$1"
+fi
 shift
 args=""
 import='java.util java.text java.io'
@@ -62,9 +67,12 @@ debug() {
 while test $# -gt 0
 do
     case "$1" in
-        --verbose|-v|--debug) 
+        --verbose|-v) 
         	verbose=true
         ;;
+	--debug|-d)
+		debug=true
+	;;
         --help|-h)
         	do_help
         	exit 0
@@ -76,6 +84,9 @@ do
     shift
 done
 
+if [ $debug == true ]; then
+	echo "USR_LIB: $USR_LIB"
+fi
 t1=`date +%s%N | cut -b1-13`
 
 echo "//`date`" > $tmp_java
@@ -113,6 +124,10 @@ if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
 	javac -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_java
 else
 	javac $tmp_java
+fi
+
+if [ $debug == true ]; then
+	cat $tmp_java
 fi
 
 if [ $verbose = "true" ]; then
