@@ -118,6 +118,14 @@ public class InlineJava {
 		try {Thread.sleep(millis);}
 		catch (InterruptedException e) {e.printStackTrace();}
 	}
+	public static boolean matches(String regex, String string) {
+		java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex);
+		java.util.regex.Matcher m = p.matcher(string);
+		return m.matches();
+	}
+	public static String datef(String f, Date d) {
+		return new SimpleDateFormat(f).format(d);
+	}
 }" >> $tmp_java
 
 if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
