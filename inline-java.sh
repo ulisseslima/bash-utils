@@ -94,7 +94,7 @@ echo_imports >> $tmp_java
 echo_static_imports >> $tmp_java
 echo "
 public class InlineJava {
-	public static void main(String... a) {
+	public static void main(String... a) throws Exception {
 		String stdin = \"\";
 		StringBuilder stdinBuilder = new StringBuilder();
 		try{BufferedReader br=new BufferedReader(new InputStreamReader(System.in));if(br.ready())while((stdin=br.readLine())!=null){stdinBuilder.append(stdin);}}catch(IOException io){io.printStackTrace();}
