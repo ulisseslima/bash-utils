@@ -71,7 +71,7 @@ do
 	echo "compacting '$f'..."
 	file="$(readlink -f "$f")"
 	file_dir="${file%/*}"
-	grep "$grep_expr" "$f" >> "$file_dir/$output"
+	grep -v "$grep_expr" "$f" >> "$file_dir/$output"
 	if [ "$remove_original" == true ]; then
 		rm "$f"
 	fi
