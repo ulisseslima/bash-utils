@@ -12,13 +12,11 @@ fi
 
 do_help() {
 	echo "compile atari game with dasm."
-	echo ""
 	echo "usage:"
 	echo "$0 game-name"
-	echo ""
-	echo "- the file game-name.asm must exist in the directory the command is being executed on."
-	echo "- files game-name.txt with list of symbols and game-name.bin will be created."
-	echo "- game-name.bin will also be copied to $bin_dir"
+	echo "the file game-name.asm must exist in the directory the command is being executed on."
+	echo "files game-name.txt with list of symbols and game-name.bin will be created."
+	echo "game-name.bin will also be copied to $bin_dir"
 }
 
 debug() {
