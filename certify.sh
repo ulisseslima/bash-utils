@@ -12,7 +12,7 @@ JBOSS=""
 
 check_alias() {
 	if [[ ! -n "$ALIAS" ]]; then
-		echo "nome do alias é obrigatório, defina seu hostname ou forneça o parâmetro --alias"
+		echo "alias is required, define your hostname or provide one with --alias"
 		exit 1
 	fi
 } 
@@ -20,16 +20,16 @@ check_alias() {
 install_in_all_jres() {
 	check_alias
 	
-	echo "encontrando instalações do java..."
+	echo "finding java installations (can take a while)..."
 	#TODO find a faster way to list java installations to all jres
 	ALL_CACERTS=`sudo find / -wholename "*/lib/security/cacerts" | sort -u`
 	echo "$ALL_CACERTS"
 	for java_cacerts in $ALL_CACERTS
 	do
-		echo "inserindo certificado no cacerts em $java_cacerts..."
+		echo "installing certificate to $java_cacerts..."
 		sudo keytool -import -noprompt -trustcacerts -alias $ALIAS -file ~/cacerts/$ALIAS.cer -keystore $java_cacerts -storepass $CACERTS_PASS
-		echo "NOTA: você pode verificar se o certificado foi adicionado corretamente a essa instalação executando o comando:"
-		echo "keytool -list -keystore $java_home -storepass $CACERTS_PASS | grep $ALIAS"
+		echo "NOTE: you can verify that the certificate was added correctly to this installation with the command:"
+		echo "keytool -list -keystore $java_cacerts -storepass $CACERTS_PASS | grep $ALIAS"
 	done
 }
 
@@ -37,10 +37,10 @@ while test $# -gt 0
 do
     case "$1" in
     	--help)
-    		echo "examplo full:"
-    		echo "$0 --alias sictd --pass 123456 --jks --cacerts-pass 123456 --jboss /caminho/home/jboss"
+    		echo "full example:"
+    		echo "$0 --alias foo --pass 123456 --jks --cacerts-pass 123456 --jboss /jboss/home"
     		echo "examplo apenas instalação:"
-    		echo "$0 --alias sictd --cacerts-pass 123456 --install"
+    		echo "$0 --alias foo --cacerts-pass 123456 --install"
     		exit 0
     	;;		
 		--alias|-a) shift
@@ -77,16 +77,16 @@ check_alias
 
 mkdir -p ~/cacerts
 
-echo "usando alias '$ALIAS' e senha '$PASS'..."
+echo "using alias '$ALIAS' and password '$PASS'..."
 
-echo "gerando certificado e keystore..."
+echo "generating certificate and keystore..."
 keytool -genkey -alias $ALIAS -keyalg RSA -validity $VALID_DAYS -keystore ~/cacerts/$ALIAS.keystore -storepass $PASS -keypass $PASS -dname "CN=$ALIAS, OU=CONTEXPRESS, O=MURAH, L=SAOPAULO, ST=SP, C=BR"
 
-echo "exportando o certificado no keystore..."
+echo "exporting certificate to keystore..."
 keytool -export -alias $ALIAS -keystore ~/cacerts/$ALIAS.keystore -storepass $PASS -file ~/cacerts/$ALIAS.cer
 
 if [ "$JKS" == "true" ]; then
-	echo "gerando jks para conexão com o desktop..."
+	echo "generating jks..."
 	keytool -import -file ~/cacerts/$ALIAS.cer -alias $ALIAS -keystore $ALIAS.jks
 fi
 
@@ -100,10 +100,10 @@ if [[ -n "$JBOSS" ]]; then
        address=\"\${jboss.bind.address}\" strategy=\"ms\"
        keystoreFile=\"$JBOSS/cacerts/$ALIAS.keystore\"
        keystorePass=\"$PASS\" />" > ~/cacerts/server.xml.snippet
-    echo "exemplo de connector do Jboss criado em ~/cacerts/server.xml.snippet"
+    echo "connector template for Jboss created in ~/cacerts/server.xml.snippet"
 fi
 
 install_in_all_jres
 
-echo "testando conectividade do alias selecionado..."
+echo "testing alias conectivity..."
 ping -c 3 $ALIAS
