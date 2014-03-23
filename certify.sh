@@ -7,12 +7,12 @@ PASS=123456
 MODE=0
 JKS=false
 CACERTS_PASS=changeit
-VALID_DAYS=3560
+VALID_DAYS=3650
 JBOSS=""
 
 install_in_all_jres() {
 	echo "encontrando instalações do java..."
-	#TODO find a faster way to list java instalaltions
+	#TODO find a faster way to list java installations to all jres
 	ALL_CACERTS=`sudo find / -wholename "*/lib/security/cacerts" | sort -u`
 	echo "$ALL_CACERTS"
 	for java_cacerts in $ALL_CACERTS

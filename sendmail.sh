@@ -46,10 +46,10 @@ do
         	shift
         	ssl=$1        	
         ;;
-	--tls)
-		shift
-		tls=$1
-	;;
+		--tls)
+			shift
+			tls=$1
+		;;
         --from|-f) 
         	shift
         	from=$1
@@ -93,8 +93,10 @@ if [ $verbose == true ]; then
 	echo "server $server"
 	echo "port $port"
 	echo "ssl $ssl"
-	echo "from $from"
+	echo "tls $tls"	
 	echo "user $user"
+	echo "from $from"
+	echo "to $to"	
 	echo "message $message"
 fi
 

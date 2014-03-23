@@ -4,6 +4,8 @@ MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 verbose=false
 debug=false
+# wether the generated files should be kept
+keep=false
 
 tmp_java=InlineJava.java
 if [ -f "$1" ]; then
@@ -77,9 +79,12 @@ do
         	do_help
         	exit 0
         ;;
-	    *)
+	--keep)
+		keep=true
+	;;
+	*)
         	args=$args$1" "
-	    ;;
+	;;
     esac
     shift
 done
@@ -153,4 +158,7 @@ if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
 else
 	java -cp . $tmp_sans_java $args
 fi
-rm $tmp_sans_java*
+
+if [ $keep != true ]; then
+	rm $tmp_sans_java*
+fi
