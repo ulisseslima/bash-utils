@@ -2,7 +2,7 @@
 
 set -e
 
-USER=`hostname`
+ALIAS=`hostname`
 PASS=123456
 MODE=0
 JKS=false
@@ -44,8 +44,8 @@ do
     		exit 0
     	;;		
 		--alias|-a) shift
-			USER=$1
-			echo "defined alias as $USER"
+			ALIAS=$1
+			echo "defined alias as $ALIAS"
         ;;
 		--pass|p) shift
 			PASS=$1			
