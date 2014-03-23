@@ -10,7 +10,16 @@ CACERTS_PASS=changeit
 VALID_DAYS=3650
 JBOSS=""
 
+check_alias() {
+	if [[ ! -n "$ALIAS" ]]; then
+		echo "nome do alias é obrigatório, defina seu hostname ou forneça o parâmetro --alias"
+		exit 1
+	fi
+} 
+
 install_in_all_jres() {
+	check_alias
+	
 	echo "encontrando instalações do java..."
 	#TODO find a faster way to list java installations to all jres
 	ALL_CACERTS=`sudo find / -wholename "*/lib/security/cacerts" | sort -u`
@@ -23,11 +32,6 @@ install_in_all_jres() {
 		echo "keytool -list -keystore $java_home -storepass $CACERTS_PASS | grep $ALIAS"
 	done
 }
-
-if [[ ! -n "$ALIAS" ]]; then
-	echo "nome do alias é obrigatório, defina seu hostname ou forneça o parâmetro --alias"
-	exit 1
-fi
 
 while test $# -gt 0
 do
@@ -67,6 +71,8 @@ do
     esac
     shift
 done
+
+check_alias
 
 mkdir -p ~/cacerts
 
