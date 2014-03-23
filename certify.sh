@@ -45,6 +45,7 @@ do
     	;;		
 		--alias|-a) shift
 			USER=$1
+			echo "defined alias as $USER"
         ;;
 		--pass|p) shift
 			PASS=$1			
