@@ -2,6 +2,7 @@
 
 # reads from std in or first arg. the catch is that it hangs if none are provided
 stdin="${1:-`cat /proc/${$}/fd/0`}"
+stdin2="$2"
 
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
@@ -63,6 +64,7 @@ do
     shift
 done
 
+extract_tables() {
 in_function=false
 in_table=false
 while read line
@@ -87,4 +89,13 @@ do
 			in_table=false
 		fi
 	fi
-done < $stdin
+done < $1
+}
+
+fout1="tables-1.sql"
+fout2="tables-2.sql"
+
+extract_tables $stdin > "$fout1"
+extract_tables $stdin2 > "$fout2"
+
+diff "$fout1" "$fout2"
