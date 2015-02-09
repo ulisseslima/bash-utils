@@ -1,16 +1,12 @@
 #!/bin/bash -e
 
-if [ "$1" == "--help" ]; then
-  echo 'keeps track of a file or directory'
-  echo 'the size is shown every $2 seconds'
-  exit 0
-fi
+# follows a log file, filtering by grep
 
-file=$1
-delay=$2
+log_file="$1"
+tmp_dir=`mktemp -d`
 
-while true
-do
-  du -sh "$file"
-  sleep $delay
-done
+nohup tail -f "$log_file" > "$tmp_dir/follow.sh.txt"
+
+#TODO
+
+
