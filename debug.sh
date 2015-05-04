@@ -3,6 +3,11 @@
 debug_dir=/usr/debug
 
 toggle() {
+	if [ ! -d $debug_dir ]; then
+		echo "creating debug dir..."
+		sudo mkdir $debug_dir
+	fi
+
 	project=$1
 	option=$2
 	if [ -f "$debug_dir/$project-enabled" ]; then
@@ -18,9 +23,9 @@ toggle() {
 case "$1" in
   --help)
 	echo "Usage: $0 project-name {|on|off|toggle}"
-	exit 1	
+	exit 1
 	;;
   *)
-	toggle $1 $2	
+	toggle $1 $2
 	;;
 esac
