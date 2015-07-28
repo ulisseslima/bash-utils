@@ -1,7 +1,5 @@
 #!/bin/bash
 
-MYSELF="$(readlink -f "$0")"
-MYDIR="${MYSELF%/*}"
 verbose=false
 debug=false
 # wether the generated files should be kept
