@@ -132,6 +132,27 @@ public class InlineJava {
 	public static String datef(String f, Date d) {
 		return new SimpleDateFormat(f).format(d);
 	}
+	public static String capitalize(String s) {
+		if (s == null || s.length() == 0) return s;
+		s = s.toLowerCase();
+		int sLen = s.length();
+		StringBuffer buf = new StringBuffer(sLen);
+		boolean capNext = true;
+		for (int i = 0; i < sLen; i++) {
+			char ch = s.charAt(i);
+			if (isDelimiter(ch, new char[] { ' ', '_' })) {
+				buf.append(' '); capNext = true;
+			} else if (capNext) {
+				buf.append(Character.toTitleCase(ch)); capNext = false;
+			} else buf.append(ch);
+		}
+		return buf.toString();
+	}
+	private static boolean isDelimiter(char ch, char[] delimiters) {
+		for (int i = 0, isize = delimiters.length; i < isize; i++) 
+			if (ch == delimiters[i]) return true;
+		return false;
+	}
 }" >> $tmp_java
 
 if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
