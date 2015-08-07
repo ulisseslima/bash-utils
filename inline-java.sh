@@ -98,11 +98,14 @@ echo_static_imports >> $tmp_java
 echo "
 public class InlineJava {
 	public static void main(String... a) throws Exception {
+		boolean in = false;
 		String stdin = \"\";
-		StringBuilder stdinBuilder = new StringBuilder();
-		try{BufferedReader br=new BufferedReader(new InputStreamReader(System.in));if(br.ready())while((stdin=br.readLine())!=null){stdinBuilder.append(stdin);}}catch(IOException io){io.printStackTrace();}
-		stdin = stdinBuilder.toString();
-		$code
+		try{BufferedReader br=new BufferedReader(new InputStreamReader(System.in));if(br.ready())
+			while((stdin=br.readLine())!=null){
+			in = true;
+			$code
+			}}catch(IOException io){io.printStackTrace();}
+		if (!in) $code
 	}
 	public static void print(Object object) {
 		if (object.getClass().isArray()) out.print(Arrays.toString((Object[]) object));
