@@ -105,7 +105,7 @@ public class InlineJava {
 			in = true;
 			$code
 			}}catch(IOException io){io.printStackTrace();}
-		if (!in) {$code}
+		if (!in) $code
 	}
 	public static void print(Object object) {
 		if (object.getClass().isArray()) out.print(Arrays.toString((Object[]) object));
