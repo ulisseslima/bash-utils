@@ -2,7 +2,7 @@
 
 SSH_PORT=22
 SSH_USER=
-SSH_PASS=
+SSH_PASS=0
 # only try ips greater than this number:
 PORT_GT=0
 DEBUG=0
@@ -24,10 +24,10 @@ do
 		--password|-p) shift
 			SSH_PASS=$1
         ;;
-	--interactive|-i)
-		interactive=true
-	;;
-        --debug)
+		--interactive|-i)
+			interactive=true
+		;;
+        --debug|-v)
         	DEBUG=1
         	debug "debug is active"
         ;;
@@ -50,34 +50,31 @@ done
 echo "mapping..."
 active_ips=`nmap -sP 192.168.0.0/24 | grep 192 | cut -d' ' -f5`
 echo "will try to find ip for user $SSH_USER with pass $SSH_PASS"
-if [ $PORT_GT -gt 0 ]; then
-	echo "Trying only ips greater than $PORT_GT"
-fi
+
+#if [ $PORT_GT -gt 0 ]; then
+#	echo "Trying only ips greater than $PORT_GT"
+#fi
 
 for ip in $active_ips
 do
-	ip_n=`echo $ip | cut -d. -f4`
-	debug "$ip ($ip_n)"
-	if [[ $ip_n > $PORT_GT || ! -n $ip_n ]]; then
-		debug "ip passed > $PORT_GT || NaN test"
-		nc -z $ip $SSH_PORT 1>/dev/null 2>&1; result=$?;
-		if [ $result -eq 0 ]; then
-			echo "trying $ip..."
-			if [ $interactive == false ]; then
-				success=`sshpass -p $SSH_PASS ssh $SSH_USER@$ip "echo OK"`
-				if [ "$success" == "OK" ]; then
-					echo "
-					$ip OK
-					"
-				fi
-			else
-				success=`ssh $SSH_USER@$ip "echo OK"`
-                                if [ "$success" == "OK" ]; then
-                                        echo "
-                                        $ip OK
-                                        "
-                                fi
+	debug "$ip"
+
+	nc -w 5 -z $ip $SSH_PORT 1>/dev/null 2>&1; result=$?;
+	if [ "$result" -eq 0 ]; then
+		debug "trying $ip..."
+		
+		if [ "$SSH_PASS" == 0 ]; then
+			ssh $SSH_USER@$ip
+		elif [ "$interactive" == false ]; then
+			success=`sshpass -p $SSH_PASS ssh $SSH_USER@$ip "echo OK"`
+			if [ "$success" == "OK" ]; then
+				echo "-- !! OK $ip OK !! --"
 			fi
+        else
+			success=`ssh $SSH_USER@$ip "echo OK"`
+            if [ "$success" == "OK" ]; then
+                echo "-- !! OK $ip OK !! --"
+            fi
 		fi
 	fi
 done
