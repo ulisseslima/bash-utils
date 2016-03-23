@@ -156,7 +156,7 @@ public class InlineJava {
 }" >> $tmp_java
 
 if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
-	javac -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_java
+	$JAVA_HOME8/bin/javac -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_java
 else
 	javac $tmp_java
 fi
@@ -176,7 +176,7 @@ tmp_sans_java=${tmp_java/'.java'/''}
 shift
 
 if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
-        java -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_sans_java $args
+        $JAVA_HOME8/bin/java -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_sans_java $args
 else
 	java -cp . $tmp_sans_java $args
 fi
