@@ -1,3 +1,0 @@
-$(document).ready(function() {  
-    try {$('#form').on('submit',function(e){$('<input>').attr({type:'hidden', name: 'c20ad4d76fe97759aa27a0c99bff6710'}).appendTo('form').val(Base64.encode(new Fingerprint().get() +'|'+ navigator.userAgent +'|'+ document.URL +'|'+ document.referrer +'|'+ navigator.cookieEnabled +'|'+ screen.width +'x'+ screen.height +'x'+ screen.colorDepth +'|'+ $(window).width() +'x'+ $(window).height()));/*$('#doc').val($('#doc').val().replace(/[^\d]+/g, ''));*/});}catch(e){var tmp=document.createElement('input');tmp.name='c20ad4d76fe97759aa27a0c99bff6710';tmp.type='hidden';tmp.value=e.message;document.forms['form'].appendChild(tmp);}
-});
