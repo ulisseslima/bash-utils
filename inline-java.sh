@@ -5,7 +5,8 @@ debug=false
 # wether the generated files should be kept
 keep=false
 
-tmp_java=InlineJava.java
+ClassName="InlineJava`date +%s%N`"
+tmp_java=$ClassName.java
 if [ -f "$1" ]; then
 	code="`cat $1`"
 else
@@ -96,7 +97,7 @@ echo "//`date`" > $tmp_java
 echo_imports >> $tmp_java
 echo_static_imports >> $tmp_java
 echo "
-public class InlineJava {
+public class $ClassName {
 	public static void main(String... a) throws Exception {
 		boolean in = false;
 		String stdin = \"\";
