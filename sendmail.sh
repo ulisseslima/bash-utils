@@ -95,7 +95,7 @@ do
 done
 
 if [ "$passw" == 'unspecified' ]; then
-	read -s -p "Password for $user: " passw
+	read -s -p "$0 email password for $user: " passw
 fi
 
 say "sending mail to $to..."
