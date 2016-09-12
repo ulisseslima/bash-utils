@@ -22,9 +22,13 @@ do_help() {
 	echo "$0 --to email@domain.com"
 }
 
+say() {
+        echo "||| $0 - $1"
+}
+
 debug() {
 	if [ $verbose == "true" ]; then
-		echo "$1"
+		say "$1"
 	fi
 }
 
@@ -82,7 +86,8 @@ do
 		shift
 		attach="$1"
 	;;
-        --*) echo "bad option $1"
+        --*) 
+		say "bad option $1"
         	exit 1
 	;;
     esac
@@ -93,17 +98,17 @@ if [ "$passw" == 'unspecified' ]; then
 	read -s -p "Password for $user: " passw
 fi
 
-echo "sending mail to $to..."
+say "sending mail to $to..."
 if [ $verbose == true ]; then
-	echo "server $server"
-	echo "port $port"
-	echo "ssl $ssl"
-	echo "tls $tls"
-	echo "user $user"
-	echo "from $from"
-	echo "to $to"
-	echo "message $message"
-	echo "attachments: $attach"
+	say "server $server"
+	say "port $port"
+	say "ssl $ssl"
+	say "tls $tls"
+	say "user $user"
+	say "from $from"
+	say "to $to"
+	say "message $message"
+	say "attachments: $attach"
 fi
 
 java -jar \
