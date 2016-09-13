@@ -99,6 +99,7 @@ if [ "$passw" == 'unspecified' ]; then
 fi
 
 say "sending mail to $to..."
+say "attachments: $attach"
 if [ $verbose == true ]; then
 	say "server $server"
 	say "port $port"
@@ -106,9 +107,7 @@ if [ $verbose == true ]; then
 	say "tls $tls"
 	say "user $user"
 	say "from $from"
-	say "to $to"
 	say "message $message"
-	say "attachments: $attach"
 fi
 
 java -jar \
