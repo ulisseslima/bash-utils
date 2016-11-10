@@ -11,7 +11,7 @@ debug=false
 keep=false
 
 ClassName="InlineJava`date +%s%N`"
-tmp_java=$ClassName.java
+
 if [ -f "$1" ]; then
 	code="`cat $1`"
 else
@@ -42,9 +42,17 @@ echo_static_imports() {
 	do
 		echo "import static $is.*;"
 	done
+	
+	_java=$JAVA_HOME/bin/java
 
-	if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
-        	echo "import static com.dvlcube.cuber.Cuber.*;"
+	if [[ "$_java" ]]; then
+		version=$("$_java" -version 2>&1 | awk -F '"' '/version/ {print $2}')
+		echo "// java version $version"
+		if [[ "$version" > "1.8" ]]; then
+		    if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
+				echo "import static com.dvlcube.cuber.Cuber.*;"
+			fi
+		fi
 	fi
 }
 
@@ -85,6 +93,9 @@ do
         ;;
 	--keep)
 		keep=true
+		shift
+		ClassName=$1
+		echo "// keeping $ClassName"
 	;;
 	*)
         	args=$args$1" "
@@ -92,6 +103,8 @@ do
     esac
     shift
 done
+
+tmp_java=$ClassName.java
 
 if [ $debug == true ]; then
 	echo "USR_LIB: $USR_LIB"
