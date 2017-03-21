@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ ! -f ~/.ssh/id_rsa.pub ]; then
+	echo "generating public ssh key..."
+	ssh-keygen
+fi
+
 user_host=$1
 
 if [ ! -n "$1" ]; then
