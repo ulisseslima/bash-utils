@@ -5,6 +5,7 @@ MYDIR="${MYSELF%/*}"
 
 verbose=false
 
+html=false
 server="smtp.gmail.com"
 port=465
 ssl=true
@@ -41,6 +42,10 @@ do
         --help|-h)
         	do_help
         	exit 0
+        ;;
+        --html)
+        	shift
+        	html=$1
         ;;
         --server|-s)
         	shift
@@ -86,7 +91,7 @@ do
 		shift
 		attach="$1"
 	;;
-        --*) 
+        --*)
 		say "bad option $1"
         	exit 1
 	;;
@@ -111,6 +116,7 @@ if [ $verbose == true ]; then
 fi
 
 java -jar \
+-Dhtml=$html \
 -Dserver=$server \
 -Dport=$port \
 -Dssl=$ssl \
