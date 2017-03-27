@@ -11,6 +11,20 @@ if [ ! -n "$1" ]; then
 	exit 1
 fi
 
+existing=$(keytool -list -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit | grep $HOST)
+if [[ "$existing" == *$HOST* ]]; then
+	echo "a certificate for $HOST already exists, do you want to remove it? [Y/n]"
+	echo "$existing"
+	read remove
+
+	if [[ "$remove" != 'n' ]]; then
+		echo "removing certificate for $HOST"
+		sudo keytool -delete -alias $HOST -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit
+	else
+		exit 1
+	fi
+fi
+
 PORT=${2:-443}
 KEYSTOREFILE=$JAVA_HOME/jre/lib/security/cacerts
 KEYSTOREPASS=changeit
@@ -26,5 +40,6 @@ sudo keytool -import -noprompt -trustcacerts \
     -alias ${HOST} -file ${HOST}.cert \
     -keystore ${KEYSTOREFILE} -storepass ${KEYSTOREPASS}
 
-# verify we've got it.
-keytool -list -v -keystore ${KEYSTOREFILE} -storepass ${KEYSTOREPASS} -alias ${HOST}
+echo ""
+echo "certificate details:"
+keytool -list -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit | grep $HOST
