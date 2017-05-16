@@ -19,7 +19,7 @@ else
 fi
 shift
 args=""
-import='java.util java.text java.io'
+import='java.util java.text java.io java.util.regex'
 static_import="java.lang.System java.util.Collections"
 
 os=`uname`
@@ -168,9 +168,16 @@ public class $ClassName {
 		return buf.toString();
 	}
 	private static boolean isDelimiter(char ch, char[] delimiters) {
-		for (int i = 0, isize = delimiters.length; i < isize; i++) 
+		for (int i = 0, isize = delimiters.length; i < isize; i++)
 			if (ch == delimiters[i]) return true;
 		return false;
+	}
+	public static void regexTokens(String regex, String string) {
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(string);
+		while (m.find())
+			for (int i = 1; i <= m.groupCount(); i++)
+				System.out.println(m.group(i));
 	}
 }" >> $tmp_java
 

@@ -12,6 +12,11 @@ if [ ! -n "$1" ]; then
 	exit 1
 fi
 
-echo "installing key for $user_host"
+port=22
+if [ -n "$2" ]; then
+	port=$2
+fi
 
-ssh-copy-id -i ~/.ssh/id_rsa.pub $user_host
+echo "installing key for -p $port $user_host"
+
+ssh-copy-id -p $port -i ~/.ssh/id_rsa.pub $user_host

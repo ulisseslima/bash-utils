@@ -5,7 +5,7 @@ mkdir -p `dirname $log`
 
 switch=${1:-add}
 interface=${2:-eth0}
-delay=${3:-50}
+delay=${3:-1000}
 loss=${4:-1}
 
 echo "interface ${interface}, ${switch}: network delay of $delay ms with ${loss}% packet loss"
