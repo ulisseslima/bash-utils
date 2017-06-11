@@ -1,0 +1,5 @@
+function mkcd(){
+  mkdir $@
+  cd $1
+}
+mkcd $@
