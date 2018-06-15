@@ -9,9 +9,13 @@ if [ ! -n "$text" ]; then
 	exit 1
 fi
 
-echo "$text" > $tmp
+if [[ "$text" == '-d' ]]; then
+	text="$2"
+	echo "$text" | ascii2uni -a U -q
+else
+	echo "$text" > $tmp
+	native2ascii -encoding utf8 $tmp $tmp_out
 
-native2ascii -encoding utf8 $tmp $tmp_out
-
-cat $tmp_out
-rm $tmp $tmp_out
+	cat $tmp_out
+	rm $tmp $tmp_out
+fi
