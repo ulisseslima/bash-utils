@@ -115,6 +115,13 @@ if [ $verbose == true ]; then
 	say "message $message"
 fi
 
+echo "$MYDIR"
+
+if [[ $(grep -c MultiPartEmail "$MYDIR/sendmail.jar") < 1 ]]; then
+	echo "jar does not have all necessary dependencies, please create it again"
+	exit 1
+fi
+
 java -jar \
 -Dhtml=$html \
 -Dserver=$server \
@@ -129,3 +136,4 @@ java -jar \
 -Dmessage="$message" \
 -Dattach="$attach" \
 $MYDIR/sendmail.jar
+

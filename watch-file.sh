@@ -8,8 +8,8 @@ do_help() {
 
 file="$1"
 
-if [ ! -f "$file" ]; then
-  echo "file not found: $file"
+if [ ! -n "$file" ]; then
+  echo "first argument must be a file or directory"
   exit 1
 fi
 
@@ -26,5 +26,5 @@ do
 
   last="$atual"
 
-  sleep 10
+  sleep 2
 done
