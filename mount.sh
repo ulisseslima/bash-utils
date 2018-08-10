@@ -1,4 +1,14 @@
 #!/bin/bash -e
+####
+# Mounts a partition. Easiest way:
+# ./mount.sh sda2	Mounts sda2 in the user directory
+#
+# Custom way:
+# ./mount.sh --partition sda2 --user whatever --dir /mnt/sda2 --type ext4
+#
+# Mounts are persisted on /etc/fstab
+####
+
 do_check_root() {
         if [[ $EUID -ne 0 ]]; then
                 echo "this script must be run as root" 1>&2
@@ -22,29 +32,31 @@ while test $# -gt 0
 do
 	case "$1" in
 		####
-		# Define a partição a ser montada
+		# Defines the partition to mount. Can also be specified as first argument if the default values are going to be used
 		--partition|-p)
 			shift
 			partition="$1"
 		;;
+		####
+		# Defines the user that will own the mount point. If unspecified, uses SUDO_USER
 		--user|-u)
 			shift
 			user="$1"
 		;;
-		--partition|-p)
-			shift
-			partition="$1"
-		;;
+		####
+		# Defines the mount point. If unspecified, uses $HOME/$partition
 		--dir|-d)
 			shift
 			dir="$1"
 		;;
+		####
+		# FS type. ext4 if unspecified
 		--type|-t)
 			shift
 			type="$1"
 		;;
 		--*)
-			echo "opção não reconhecida: $1"
+			echo "unrecognized option: $1"
 			exit 1
 		;;
 	esac
