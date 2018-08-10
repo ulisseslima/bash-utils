@@ -1,4 +1,4 @@
 bash-utils
 ==========
 
-Script collection.
+Bash script collection.
