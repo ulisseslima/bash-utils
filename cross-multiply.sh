@@ -13,4 +13,5 @@ echo "therefore..."
 u1=$(($u*$k2))
 x=$(echo "scale=9; $u1/$k1" | bc)
 
+echo "($u * $k2) / $k1"
 echo "x = $x"
