@@ -2,6 +2,8 @@
 
 if [ ! -n "$1" ]; then
 	echo "creates an image from a text. first argument must be the text to print"
+	echo "e.g.:"
+	echo 'for i in {10..99}; do print.sh "$i"; done'
 	exit 0
 fi
 
