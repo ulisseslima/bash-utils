@@ -8,7 +8,7 @@ fi
 verbose=false
 debug=false
 # wether the generated files should be kept
-keep=false
+keep=true
 
 ClassName="InlineJava`date +%s%N`"
 

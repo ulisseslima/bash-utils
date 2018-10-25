@@ -36,7 +36,10 @@ debug() {
 while test $# -gt 0
 do
     case "$1" in
-        --verbose|-v|--debug)
+	-v|-h)
+		echo "$0 v2.1"
+	;;
+        --verbose|--debug)
         	verbose=true
         ;;
         --help|-h)
