@@ -38,6 +38,7 @@ do
     case "$1" in
 	-v|-h)
 		echo "$0 v2.1"
+		exit 0
 	;;
         --verbose|--debug)
         	verbose=true
