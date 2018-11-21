@@ -8,7 +8,7 @@ fi
 verbose=false
 debug=false
 # wether the generated files should be kept
-keep=true
+keep=false
 
 ClassName="InlineJava`date +%s%N`"
 
@@ -95,7 +95,7 @@ do
 		keep=true
 		shift
 		ClassName=$1
-		echo "// keeping $ClassName"
+		echo "// keeping as $ClassName"
 	;;
 	*)
         	args=$args$1" "
