@@ -108,7 +108,10 @@ if [ "$passw" == 'unspecified' ]; then
 fi
 
 say "sending mail to $to..."
-say "attachments: $attach"
+if [ -n "$attach" ]; then
+        say "attachments: $attach"
+fi
+
 if [ $verbose == true ]; then
 	say "server $server"
 	say "port $port"
@@ -124,6 +127,15 @@ echo "$MYDIR"
 if [[ $(grep -c MultiPartEmail "$MYDIR/sendmail.jar") < 1 ]]; then
 	echo "jar does not have all necessary dependencies, please create it again"
 	exit 1
+fi
+
+if [[ $html == true ]]; then
+        if [ -n "$MAIL_SIG" ]; then
+                echo "attaching signature..."
+                message="$message<p>$(cat $MAIL_SIG)"
+        else
+                echo "MAIL_SIG is undefined, no signature will be included"
+        fi
 fi
 
 java -jar \
