@@ -16,3 +16,4 @@ echo "tarring '$folder' as $tarname"
 tar cf - "$folder" -P | pv -s $(du -sb "$folder" | awk '{print $1}') | gzip > "$tarname"
 
 du -sh $tarname
+readlink -f $tarname
