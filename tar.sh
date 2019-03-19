@@ -9,7 +9,8 @@ if [ ! -d "$folder" ]; then
 	exit 1
 fi
 
-tarname=$(basename "$folder").tar.gz
+now=$(date +'%Y-%m-%d_%H-%M-%S')
+tarname=$(basename "$folder")_$now.tar.gz
 
 echo "tarring '$folder' as $tarname"
 tar cf - "$folder" -P | pv -s $(du -sb "$folder" | awk '{print $1}') | gzip > "$tarname"
