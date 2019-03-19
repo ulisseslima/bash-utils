@@ -117,6 +117,7 @@ echo_static_imports >> $tmp_java
 echo "
 public class $ClassName {
 	public static void main(String... a) throws Exception {
+		double[] n = numbers(a);
 		boolean in = false;
 		String stdin = \"\";
 		try{BufferedReader br=new BufferedReader(new InputStreamReader(System.in));if(br.ready())
@@ -125,6 +126,14 @@ public class $ClassName {
 			$code
 			}}catch(IOException io){io.printStackTrace();}
 		if (!in) {$code}
+	}
+	public static double[] numbers(String[] a) {
+		if (a == null || a.length < 1) return null;
+		double[] n = new double[a.length];
+		for (int i = 0; i < a.length; i++) {
+			n[i] = Double.valueOf(a[i]);
+		}
+		return n;
 	}
 	public static void print(Object object) {
 		if (object.getClass().isArray()) out.print(Arrays.toString((Object[]) object));
@@ -204,7 +213,7 @@ shift
 if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
         $JAVA_HOME/bin/java -cp "$USR_LIB${fileseparator}cuber.jar${pathseparator}." $tmp_sans_java $args
 else
-	java -cp . $tmp_sans_java $args
+	java -Xmx1G -cp . $tmp_sans_java $args
 fi
 
 if [ $keep != true ]; then
