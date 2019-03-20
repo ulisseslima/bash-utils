@@ -39,3 +39,9 @@ enscript -p "${fname}.ps" /dev/stdin
 ps2pdf "${fname}.ps"
 
 rm "${fname}.ps"
+
+out="$1"
+if [ -n "$out" ]; then
+	echo "moving ${fname}.pdf to $out"
+	mv "${fname}.pdf" "$out"
+fi
