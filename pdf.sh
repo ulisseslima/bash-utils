@@ -8,22 +8,10 @@ require() {
     fi
 
     case $switch in
-      --string|-s)
-        if [ ! -n "$1" ]; then
-            log "$2"
-            exit 1
-        fi
-      ;;
       --file|-f)
         if [ ! -f "$1" ]; then
-            log "Arquivo não encontrado: '$1'"
-            exit 1
-        fi
-      ;;
-      --dir|-d)
-        if [ ! -d "$1" ]; then
-            log "Diretório não encontrado: '$1'"
-            exit 1
+	        echo "not found: '$1'. installing..."
+		sudo apt-get install enscript ghostscript
         fi
       ;;
     esac
