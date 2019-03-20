@@ -10,7 +10,7 @@ require() {
     case $switch in
       --file|-f)
         if [ ! -f "$1" ]; then
-	        echo "not found: '$1'. installing..."
+	        echo "required libs not found. installing..."
 		sudo apt-get install enscript ghostscript
         fi
       ;;
@@ -20,16 +20,15 @@ require() {
 now=$(date +'%Y-%m-%d_%H-%M-%S')
 fname="pdf-${now}"
 
-require -f $(which enscript)
-require -f $(which ps2pdf)
+require -f $(which enscript) lib
+require -f $(which ps2pdf) lib
 
-enscript -p "${fname}.ps" /dev/stdin
+enscript -p "${fname}.ps"
 ps2pdf "${fname}.ps"
 
 rm "${fname}.ps"
 
 out="$1"
 if [ -n "$out" ]; then
-	echo "moving ${fname}.pdf to $out"
 	mv "${fname}.pdf" "$out"
 fi
