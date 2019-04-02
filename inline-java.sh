@@ -117,7 +117,7 @@ echo_static_imports >> $tmp_java
 echo "
 public class $ClassName {
 	public static void main(String... a) throws Exception {
-		double[] n = numbers(a);
+		//double[] n = numbers(a);
 		boolean in = false;
 		String stdin = \"\";
 		try{BufferedReader br=new BufferedReader(new InputStreamReader(System.in));if(br.ready())
