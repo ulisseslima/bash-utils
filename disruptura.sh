@@ -19,6 +19,7 @@ de regressão
 progressivo
 do estado da arte
 ahead-of-time
+da análise preemptiva
 das equipes,'
 
 echo "$terms" > /tmp/terms
