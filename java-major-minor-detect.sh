@@ -1,9 +1,10 @@
 #!/bin/bash
 
-file="$1"
+file="$(readlink -f $1)"
 
 if [ ! -f "$file" ]; then
-	echo "o primeiro argumento deve ser um arquivo válido"
+	echo "o primeiro argumento deve ser um arquivo válido. '$file' was not found"
+	exit 1
 fi
 
 echo "escrevendo..."

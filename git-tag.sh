@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 v="$1"
 if [ ! -n "$v" ]; then
@@ -15,8 +15,27 @@ fi
 echo "current tags:"
 git tag
 
-echo "tagging as $v..."
-git tag -a $v -m "$msg"
+if [[ "$(git tag | grep -c $v)" -gt 0 ]]; then
+	echo "tag $v already exists, skipping..."
+else
+	changelog="$3"
+	if [ -f "$changelog" ]; then
+		today=$(now.sh --date)
 
-echo "pushing tag"
-git push --tags
+		new_change=$(grep -c "$v" "$changelog")
+		if [[ "$new_change" -eq 0 ]]; then
+			changetype=$(echo "$msg" | cut -d' ' -f1)
+			echo && echo >> $changelog
+			echo "## [$v] - $today" >> $changelog
+			echo "### ${changetype^}" >> $changelog
+		fi
+
+		echo "- @$USER - ${msg}" >> $changelog	
+	fi
+
+	echo "tagging as $v..."
+	git tag -a $v -m "$msg"
+
+	echo "pushing tag $v"
+	git push --tags
+fi

@@ -1,5 +1,7 @@
 #!/bin/bash
 
-javabin=${1:-java}
+if [ -n "$1" ]; then
+	JAVA_HOME="$1"
+fi
 
-$javabin -version 2>&1 | head -1 | cut -d'"' -f2 | sed '0,/^1\./s///' | cut -d'.' -f1
+"$JAVA_HOME/bin/java" -version 2>&1 | head -1 | cut -d'"' -f2 | sed '0,/^1\./s///' | cut -d'.' -f1
