@@ -18,18 +18,23 @@ git tag
 if [[ "$(git tag | grep -c $v)" -gt 0 ]]; then
 	echo "tag $v already exists, skipping..."
 else
+	echo "will create tag $v..."
 	changelog="$3"
 	if [ -f "$changelog" ]; then
+		echo "found changelog $changelog"
 		today=$(now.sh --date)
+		echo "today: $today"
 
-		new_change=$(grep -c "$v" "$changelog")
+		new_change=$(grep -c "$v" "$changelog" || true)
 		if [[ "$new_change" -eq 0 ]]; then
+			echo "creating changelog entry..."
 			changetype=$(echo "$msg" | cut -d' ' -f1)
 			echo && echo >> $changelog
 			echo "## [$v] - $today" >> $changelog
 			echo "### ${changetype^}" >> $changelog
 		fi
 
+		echo "adding changelog message: $msg"
 		echo "- @$USER - ${msg}" >> $changelog	
 	fi
 
