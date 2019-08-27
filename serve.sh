@@ -13,4 +13,5 @@ fi
 
 echo "serving '$dir'"
 
+# alternatively httpserv
 http-server "$dir" -p $port
