@@ -1,17 +1,25 @@
 #!/bin/bash
 source /etc/profile
+PATH
 
 word=$1
 nterms=$2
+fverbs=/tmp/verbs
 if [ ! -n "$word" ]; then
-	cat $DICTIONARY_PT | sed '/^a/ d' | grep -v inha > /tmp/dict
-	word=$(random.sh /tmp/dict)
+	if [ ! -f "$DICTIONARY_PT" ]; then
+		>&2 echo "no dictionary file found. define it with DICTIONARY_PT"
+		exit 1
+	fi
+
+	cat $DICTIONARY_PT | sed '/^a/ d' | grep 'r$' > $fverbs
+	word=$(random.sh $fverbs)
 fi
 
 terms='à disruptura
 do paradigma
 da dinamização
 estrutural
+fenomenológico
 com democratização,
 do trabalho
 alternativo
@@ -22,7 +30,8 @@ ahead-of-time
 da análise preemptiva
 das equipes,'
 
-echo "$terms" > /tmp/terms
+fterms=/tmp/terms
+echo "$terms" > $fterms
 
 if [ "$nterms" == "all" ]; then
 	nterms=$(echo "$terms" | wc -l)
@@ -37,15 +46,15 @@ START=1
 END=$nterms
 for (( c=$START; c<=$END; c++ ))
 do
-	use="$(random.sh /tmp/terms)"
-	grep -v "$use" /tmp/terms > /tmp/terms2
-	rm /tmp/terms && mv /tmp/terms2 /tmp/terms
+	use="$(random.sh $fterms)"
+	grep -v "$use" $fterms > "${fterms}.2"
+	rm $fterms && mv "${fterms}.2" $fterms
 	usable="$usable $use"
 done
 
 echo "using $nterms terms"
 
-echo -n "$word é um conceito "
+echo -n "'$word' é um conceito "
 while read term
 do
 	echo -n "$term "
