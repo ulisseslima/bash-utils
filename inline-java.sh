@@ -218,4 +218,8 @@ fi
 
 if [ $keep != true ]; then
 	rm $tmp_sans_java*
+else
+	if [ "$verbose" == true ]; then
+		echo "$tmp_java kept"
+	fi
 fi
