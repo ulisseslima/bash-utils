@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -n "$JAVA_HOME" ]; then
-	echo "JAVA_HOME is not defined"
+	>&2 echo "JAVA_HOME is not defined"
 	exit 1
 fi
 
@@ -83,6 +83,9 @@ do
     case "$1" in
         --verbose|-v) 
         	verbose=true
+        	echo "verbose mode on"
+        	echo "$JAVA_HOME"
+        	java -version
         ;;
 	--debug|-d)
 		debug=true
@@ -95,7 +98,12 @@ do
 		keep=true
 		shift
 		ClassName=$1
-		echo "// keeping as $ClassName"
+		if [ -n "$ClassName" ]; then
+			echo "// keeping as $ClassName"
+		else
+			>&2 echo "you need to choose a name for the source file as second argument of --keep"
+			exit 1
+		fi
 	;;
 	*)
         	args=$args$1" "
