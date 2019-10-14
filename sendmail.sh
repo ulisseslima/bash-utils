@@ -1,4 +1,5 @@
 #!/bin/bash
+source /etc/profile
 
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
@@ -120,6 +121,7 @@ if [ $verbose == true ]; then
 	say "user $user"
 	say "from $from"
 	say "message $message"
+	say "password $passw"
 fi
 
 echo "$MYDIR"
