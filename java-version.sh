@@ -1,4 +1,5 @@
 #!/bin/bash
+# https://stackoverflow.com/questions/7334754/correct-way-to-check-java-version-from-bash-script/56243046#56243046
 
 if [ -n "$1" ]; then
 	JAVA_HOME="$1"

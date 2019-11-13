@@ -18,6 +18,8 @@ git tag
 if [[ "$(git tag | grep -c $v)" -gt 0 ]]; then
 	echo "tag $v already exists, continue anyway? (ctrl+c to abort, any key to skip tag)"
 	read anyKey
+elif [[ "$v" == *SNAPSHOT* ]]; then
+	echo "$v is snapshot, no tag will be created"
 else
 	echo "will create tag $v..."
 	changelog="$3"
@@ -37,6 +39,9 @@ else
 
 		echo "adding changelog message: $msg"
 		echo "- @$USER - ${msg}" >> $changelog	
+
+		echo "tagging as $v..."
+		git commit -a -m "changelog"
 	fi
 
 	echo "tagging as $v..."

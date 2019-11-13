@@ -5,4 +5,4 @@ if [ ! -f "$3" ]; then
 fi
 
 echo "replacing '$1' with '$2' in '$3'"
-sed -i 's/$1/$2/g' "$3"
+sed -i "s/$1/$2/g" "$3"
