@@ -1,9 +1,9 @@
 #!/bin/bash
 source /etc/profile
 
-MYSELF="$(readlink -f "$0")"
-MYDIR="${MYSELF%/*}"
 ME=$(basename $MYSELF)
+MYSELF="$(readlink -f "$0")"
+I="${MYSELF%/*}"
 
 do_help() {
 	echo "usage:"
