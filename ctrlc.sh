@@ -5,4 +5,4 @@ if [[ -n "$1" ]]; then
 	in=$(real "$1")
 fi
 
-cat $in | xclip -sel clip
+printf "$(cat $in)" | xclip -sel clip
