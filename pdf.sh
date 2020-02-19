@@ -17,6 +17,12 @@ require() {
     esac
 }
 
+if [ "$1" == *-h* ]; then
+	echo "creates a PDF from text."
+	echo "usage: "
+	echo "echo text | pdf.sh"
+fi
+
 now=$(date +'%Y-%m-%d_%H-%M-%S')
 fname="pdf-${now}"
 
