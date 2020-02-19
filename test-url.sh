@@ -1,3 +1,3 @@
 #!/bin/bash
 
-curl -sSf "$1" > /dev/null
+curl -k -sSf "$1" > /dev/null
