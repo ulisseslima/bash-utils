@@ -13,7 +13,10 @@ fi
 
 echo "JAVA_HOME=$JAVA_HOME"
 
-existing=$(keytool -list -keystore "$JAVA_HOME/jre/lib/security/cacerts" -storepass changeit | grep $HOST)
+kt=$(real keytool)
+echo "keytool: $kt"
+
+existing=$($kt -list -keystore "$JAVA_HOME/jre/lib/security/cacerts" -storepass changeit | grep $HOST)
 if [[ "$existing" == *${HOST}* ]]; then
 	echo "a certificate for $HOST already exists, do you want to remove it? [Y/n]"
 	echo "$existing"
@@ -21,7 +24,7 @@ if [[ "$existing" == *${HOST}* ]]; then
 
 	if [[ "${remove,,}" != 'n' ]]; then
 		echo "removing certificate for $HOST"
-		sudo keytool -delete -alias $HOST -keystore "$JAVA_HOME/jre/lib/security/cacerts" -storepass changeit
+		sudo $kt -delete -alias $HOST -keystore "$JAVA_HOME/jre/lib/security/cacerts" -storepass changeit
 	else
 		exit 0
 	fi
@@ -38,10 +41,10 @@ openssl s_client -connect ${HOST}:${PORT} </dev/null \
     | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ${HOST}.cert
 
 # create a keystore and import certificate
-sudo keytool -import -noprompt -trustcacerts \
+sudo $kt -import -noprompt -trustcacerts \
     -alias ${HOST} -file ${HOST}.cert \
     -keystore ${KEYSTOREFILE} -storepass ${KEYSTOREPASS}
 
 echo ""
 echo "certificate details:"
-keytool -list -keystore "$JAVA_HOME/jre/lib/security/cacerts" -storepass changeit | grep $HOST
+$kt -list -keystore "$JAVA_HOME/jre/lib/security/cacerts" -storepass changeit | grep $HOST
