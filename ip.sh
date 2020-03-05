@@ -7,4 +7,6 @@ if [ ! -n "$1" ]; then
 	exit 1
 fi
 
-dig @8.8.4.4 +noall +answer $1
+dns=${2:-8.8.4.4}
+
+dig @$dns +noall +answer $1
