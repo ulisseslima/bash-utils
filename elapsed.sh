@@ -2,8 +2,8 @@
 
 start="$1"
 if [ ! -n "$start" ]; then
-	>&2 echo "first arg must be start time in millis"
-	exit 1
+	echo $(($(date +%s%N)/1000000))
+	exit 0
 fi
 
 end=$(($(date +%s%N)/1000000))

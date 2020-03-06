@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [ ! -n "$JAVA_HOME" ]; then
-	echo "JAVA_HOME must be defined"
-	exit 1
-fi
-
 HOST=$1
 if [ ! -n "$1" ]; then
 	echo "first arg must be the host, followed by port on 2nd arg (if not specified, 443 is considered"
@@ -12,8 +7,16 @@ if [ ! -n "$1" ]; then
 fi
 
 echo "JAVA_HOME=$JAVA_HOME"
+if [ ! -n "$JAVA_HOME" ]; then
+	echo "JAVA_HOME must be defined"
+	exit 1
+fi
 
 kt=$(real keytool)
+if [ ! -f "$kt" ]; then
+	echo "keytool nout found: $kt"
+	exit 1
+fi
 echo "keytool: $kt"
 
 existing=$($kt -list -keystore "$JAVA_HOME/jre/lib/security/cacerts" -storepass changeit | grep $HOST)

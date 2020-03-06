@@ -8,7 +8,7 @@ if [ "$1" == '--help' ]; then
 	exit 0
 fi
 
-hosts='cvs.murah smb.murah'
+hosts='cvs.murah smb.murah siecm.des.caixa'
 if [[ -n $1 ]]; then
         hosto=$1
 fi
