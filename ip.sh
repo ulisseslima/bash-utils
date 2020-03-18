@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -n "$1" ]; then
-	echo "resolves the IP of the hostnamed passed using Google's DNS (8.8.4.4)"
+	echo "resolves the IP of the hostname passed using Google's DNS (8.8.4.4)"
 	echo ""
 	echo "first argument must be the host"
 	exit 1
@@ -18,10 +18,14 @@ update_hosts() {
   echo "added to hosts: $ip $host"
 }
 
-host=$1
-dns=${2:-8.8.4.4}
+if [ ! -n "$DEFAULT_DNS" ]; then
+	DEFAULT_DNS=8.8.4.4
+fi
 
-ip=$(dig @$DNS_CAIXA $host | awk '/ANSWER/{getline; print}' | rev | awk '{split($0,a,"\t"); print a[1]}' | rev | grep -v '^$')
+host=$1
+dns=${2:-$DEFAULT_DNS}
+
+ip=$(dig @$dns $host | awk '/ANSWER/{getline; print}' | rev | awk '{split($0,a,"\t"); print a[1]}' | rev | grep -v '^$')
 echo "$host ($ip) [$dns]"
 
 for arg in "$@"

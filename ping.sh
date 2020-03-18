@@ -8,7 +8,7 @@ if [ "$1" == '--help' ]; then
 	exit 0
 fi
 
-hosts='cvs.murah smb.murah siecm.des.caixa'
+hosts='cvs.murah smb.murah siecm.des.caixa uol.com.br'
 if [[ -n $1 ]]; then
         hosto=$1
 fi
@@ -19,14 +19,19 @@ if [[ -n $2 ]]; then
 fi
 
 function test_hosts() {
+	dato=`date`
+	echo ""
+	echo "$dato"
+	echo "############################"
+
 	for host in "$@"
 	do
-		dato=`date`
 		pingo=`ping -c 1 $host`
 		if [[ $pingo == *'100% packet loss'* ]]; then
-			echo "$dato - $host: ..."
+			echo "$host: ..."
 		else
-			echo "$dato - $host: OK"
+			latency=$(echo "$pingo" | grep time= | rev | cut -d'=' -f1 | rev)
+			echo "$host: OK ($latency)"
 		fi
 	done
 }

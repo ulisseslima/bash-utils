@@ -22,6 +22,7 @@ elif [[ "$v" == *SNAPSHOT* ]]; then
 	echo "$v is snapshot, no tag will be created"
 else
 	echo "will create tag $v..."
+	# readme
 	changelog="$3"
 	if [ -f "$changelog" ]; then
 		echo "found changelog $changelog"
