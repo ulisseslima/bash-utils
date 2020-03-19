@@ -23,6 +23,7 @@ if [ ! -n "$DEFAULT_DNS" ]; then
 fi
 
 host=$1
+# TODO check if DEFAULT_DNS not null
 dns=${2:-$DEFAULT_DNS}
 
 ip=$(dig @$dns $host | awk '/ANSWER/{getline; print}' | rev | awk '{split($0,a,"\t"); print a[1]}' | rev | grep -v '^$')
