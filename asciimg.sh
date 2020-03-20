@@ -11,6 +11,11 @@ help() {
 }
 
 img="$1"
+if [ ! -f "$img" ]; then
+	echo "first arg must be a file: '$img1'"
+	exit 1
+fi
+
 scale=${2:-10}
 
 inline-java.sh "println(\$img(\"$img\").toAscii($scale));"

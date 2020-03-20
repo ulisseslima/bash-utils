@@ -1,5 +1,11 @@
 #!/bin/bash
 
+debug() {
+	if [ "$verbose" == true ]; then
+        	echo "//# $1"
+        fi
+}
+
 if [ ! -n "$JAVA_HOME" ]; then
 	>&2 echo "JAVA_HOME is not defined"
 	exit 1
@@ -46,12 +52,17 @@ echo_static_imports() {
 	_java=$JAVA_HOME/bin/java
 
 	if [[ "$_java" ]]; then
-		version=$("$_java" -version 2>&1 | awk -F '"' '/version/ {print $2}')
+		version=$(java-version.sh)
 		echo "// java version $version"
-		if [[ "$version" > "1.8" ]]; then
-		    if [ -f "$USR_LIB${fileseparator}cuber.jar" ]; then
-				echo "import static com.dvlcube.cuber.Cuber.*;"
-			fi
+		if [[ $version > 8 ]]; then
+		    cuber="$USR_LIB${fileseparator}cuber.jar"
+		    if [ -f "$cuber" ]; then
+			echo "import static com.dvlcube.cuber.Cuber.*;"
+		    else
+			debug "cuber lib not found: $cuber"
+		    fi
+		else
+		    debug "java version less than 8 ($version), some features might be disabled."
 		fi
 	fi
 }
@@ -227,7 +238,5 @@ fi
 if [ $keep != true ]; then
 	rm $tmp_sans_java*
 else
-	if [ "$verbose" == true ]; then
-		echo "$tmp_java kept"
-	fi
+	debug "$tmp_java kept"
 fi
