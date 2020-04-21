@@ -12,8 +12,8 @@ if [ ! -n "$msg" ]; then
 	exit 1
 fi
 
-echo "current tags:"
-git tag
+echo "last 5 tags:"
+git tag | tail -5
 
 if [[ "$(git tag | grep -c $v)" -gt 0 ]]; then
 	echo "tag $v already exists, continue anyway? (ctrl+c to abort, any key to skip tag)"
@@ -39,7 +39,7 @@ else
 		fi
 
 		echo "adding changelog message: $msg"
-		echo "- @$USER - ${msg}" >> $changelog	
+		echo "- @$USER - ${msg}" >> $changelog
 
 		echo "tagging as $v..."
 		git commit -a -m "changelog"

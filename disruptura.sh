@@ -1,6 +1,5 @@
 #!/bin/bash
 source /etc/profile
-PATH
 
 word=$1
 nterms=$2
@@ -20,15 +19,37 @@ do paradigma
 da dinamização
 estrutural
 fenomenológico
+nada
+ao mesmo tempo,
+no tempo
+, posto que é
+, partindo do pressuposto que nunca foi
+quasi-misantropo
 com democratização,
 do trabalho
-alternativo
+alternativamente
+incôngruo
+e idempotente
+pelo mindset
+integral
+pela falsa dicotomia
+paralelamente
+surpreendentemente
+desconstruído
 de regressão
 progressivo
+atrelado
+cerceante
 do estado da arte
 ahead-of-time
 da análise preemptiva
 das equipes,'
+
+particles='do
+da
+para
+é
+'
 
 fterms=/tmp/terms
 echo "$terms" > $fterms
