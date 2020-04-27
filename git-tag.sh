@@ -1,53 +1,58 @@
 #!/bin/bash -e
+MYSELF="$(readlink -f "$0")"
+MYDIR="${MYSELF%/*}"
+ME=$(basename $MYSELF)
+
+source $(real log.sh)
 
 v="$1"
 if [ ! -n "$v" ]; then
-	echo first arg must be the tag name
+	info first arg must be the tag ID
 	exit 1
 fi
 
 msg="$2"
 if [ ! -n "$msg" ]; then
-	echo second arg must be the tag message
+	info second arg must be the tag message
 	exit 1
 fi
 
-echo "last 5 tags:"
+info "last 5 tags:"
 git tag | tail -5
 
-if [[ "$(git tag | grep -c $v)" -gt 0 ]]; then
-	echo "tag $v already exists, continue anyway? (ctrl+c to abort, any key to skip tag)"
+if [[ $(git tag -l $v) ]]; then
+	err "tag '$v' already exists, continue anyway? (ctrl+c to abort, any key to skip tag)"
 	read anyKey
 elif [[ "$v" == *SNAPSHOT* ]]; then
-	echo "$v is snapshot, no tag will be created"
+	info "$v is snapshot, no tag will be created"
 else
-	echo "will create tag $v..."
+	info "will create tag $v..."
 	# readme
 	changelog="$3"
 	if [ -f "$changelog" ]; then
-		echo "found changelog $changelog"
+		info "found changelog $changelog"
 		today=$(now.sh --date)
-		echo "today: $today"
+		info "today: $today"
 
 		new_change=$(grep -c "$v" "$changelog" || true)
 		if [[ "$new_change" -eq 0 ]]; then
-			echo "creating changelog entry..."
+			info "creating changelog entry..."
 			changetype=$(echo "$msg" | cut -d' ' -f1)
 			echo && echo >> $changelog
 			echo "## [$v] - $today" >> $changelog
 			echo "### ${changetype^}" >> $changelog
 		fi
 
-		echo "adding changelog message: $msg"
+		info "adding changelog message: $msg"
 		echo "- @$USER - ${msg}" >> $changelog
 
-		echo "tagging as $v..."
+		info "tagging as $v..."
 		git commit -a -m "changelog"
 	fi
 
-	echo "tagging as $v..."
+	info "tagging as $v..."
 	git tag -a $v -m "$msg"
 
-	echo "pushing tag $v"
+	info "pushing tag $v"
 	git push --tags
 fi

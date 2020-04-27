@@ -1,4 +1,11 @@
 #!/bin/bash
+# check:
+# 	locally:
+#	- ssh -vvv ... to debug
+#	on server:
+#	- /var/log/auth.log
+#	- 0700 permissions for the ENTIRE user's home, 0644 permissions for authorized_keys. ls -lad $HOME to make sure
+##
 
 if [ ! -f ~/.ssh/id_rsa.pub ]; then
 	echo "generating public ssh key..."
@@ -19,4 +26,8 @@ fi
 
 echo "installing key for -p $port $user_host"
 
-ssh-copy-id -p $port -i ~/.ssh/id_rsa.pub $user_host
+pub_key=$(readlink -f ~/.ssh/id_rsa.pub)
+cat $pub_key
+
+echo "ssh-copy-id -p $port -i $pub_key $user_host"
+ssh-copy-id -p $port -i $pub_key $user_host

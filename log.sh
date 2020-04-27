@@ -33,6 +33,11 @@ function log() {
     indicator="$1"
     shift
 
+	if [[ "$1" == '-n' ]]; then
+		echo ""
+		shift
+	fi
+
     echo "$indicator $(now.sh -dt) - ${FUNCNAME[2]}@${BASH_LINENO[1]}/$level: $@"
     echo "$MYSELF - $indicator $(now.sh -dt) - ${FUNCNAME[2]}@${BASH_LINENO[1]}/$level: $@" >> $logf
 }

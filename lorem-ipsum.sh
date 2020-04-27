@@ -1,9 +1,23 @@
-#!/bin/bash
+#!/bin/bash -e
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 ME=$(basename $MYSELF)
 
 source $MYDIR/log.sh
+
+trap 'catch $? $LINENO' ERR
+catch() {
+  err "status $1 on line $2:"
+  code=$(cat $MYSELF | head -86 | tail -1)
+  echo "$code"
+
+  err -n "words=$words"
+  err "line_no=$line_no"
+  err "paragraph=$paragraph"
+  err "count=$count"
+  err "wpl=$wpl"
+  err line=$line
+}
 
 do_help() {
     echo "create documents with random words."
@@ -17,7 +31,7 @@ count=0
 words=50
 dictionary=''
 wpl=10
-paragraph=2
+paragraph=10
 
 while test $# -gt 0
 do
@@ -44,10 +58,6 @@ do
             paragraph="$1"
             debug "lines per paragraph: $wpl"
         ;;
-        --pdf)
-            pdf=true
-            debug "generate pdf: true"
-        ;;
         --dictionary|-d)
             shift
             dictionary="$1"
@@ -55,7 +65,7 @@ do
                 err "not a file: '$dictionary'"
                 exit 1
             fi
-            debug "dictionary: $dictionary"
+            debug "words on dictionary: $(wc -l $dictionary)"
         ;;
         -*)
             echo "bad option '$1'"
@@ -64,13 +74,16 @@ do
     shift
 done
 
-require.sh "$dictionary" "a dictionary file is required. a dictionary should contain one word per line"
+require.sh "$dictionary" "a dictionary file is required. a dictionary should contain one word per line. specify with -d"
 
 while true
 do
     line=$(shuf -rn $wpl $dictionary)
     echo ${line^}.
-    ((line_no++)); [[ $((line_no % $paragraph)) == 0 ]] && echo ""
+
+    line_no=$((line_no+1))
+    [[ $((line_no % paragraph)) == 0 ]] && echo ""
+
     ((count+=wpl)); [[ $count -ge $words ]] && break
 done
 

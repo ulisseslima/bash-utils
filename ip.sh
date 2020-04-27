@@ -11,9 +11,11 @@ update_hosts() {
   ip=$1
   host=$2
 
-  grep -v "$host" /etc/hosts > /tmp/hosts.2
-  echo "$ip $host" >> /tmp/hosts.2
-  sudo mv /tmp/hosts.2 /etc/hosts
+  hosts_tmp=/tmp/hosts.2
+  grep -v "$host" /etc/hosts > $hosts_tmp
+  echo "# $(now.sh -dt) - $0 - $host added" >> $hosts_tmp
+  echo "$ip $host" >> $hosts_tmp
+  sudo mv $hosts_tmp /etc/hosts
 
   echo "added to hosts: $ip $host"
 }

@@ -2,3 +2,4 @@
 *.class
 nohup.out
 *.pdf
+.*
