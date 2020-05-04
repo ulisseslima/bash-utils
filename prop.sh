@@ -20,6 +20,10 @@ if [[ ! -n "$newvalue" ]]; then
 	exit 0
 fi
 
+if [ ! -f "$filename" ]; then
+    touch "$filename"
+fi
+
 if ! grep -R "^[#]*\s*${thekey}=.*" $filename > /dev/null; then
   debug "APPENDING '${thekey}'"
   echo "$thekey=$newvalue" >> $filename
