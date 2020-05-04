@@ -56,21 +56,18 @@ function debug() {
     fi
 }
 
-case "$1" in
-    --info)
-        shift
-        info "$@"
-    ;;
-    --error)
-        shift
-        err "$@"
-    ;;
-    --debug)
-        shift
-        if [[ "$1" == on || "$1" == off ]]; then
-            debugging $1
-        else
-            debug "$@"
-        fi
-    ;;
-esac
+debugging off
+for var in "$@"
+do
+    case "$var" in
+        --verbose|--debug|-v)
+            shift
+            echo "debug is on"
+            debugging on
+        ;;
+        --quiet|-q)
+            shift
+            debugging off
+        ;;
+    esac
+done
