@@ -16,12 +16,12 @@ function info() {
 }
 
 function err() {
-    log ERROR '!!!' "$@"
+    >&2 log ERROR '!!!' "$@"
 }
 
 function debug() {
     if [[ "$verbose" == true ]]; then
-        log DEBUG '>>>' "$@"
+        >&2 log DEBUG '>>>' "$@"
     fi
 }
 
