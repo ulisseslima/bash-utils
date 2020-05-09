@@ -38,7 +38,9 @@ function log() {
 		shift
 	fi
 
-    echo "$indicator $(now.sh -dt) - ${FUNCNAME[2]}@${BASH_LINENO[1]}/$level: $@"
+    if [[ $(debugging) == on ]]; then
+    	echo "$indicator $(now.sh -dt) - ${FUNCNAME[2]}@${BASH_LINENO[1]}/$level: $@"
+    fi
     echo "$MYSELF - $indicator $(now.sh -dt) - ${FUNCNAME[2]}@${BASH_LINENO[1]}/$level: $@" >> $logf
 }
 
@@ -51,9 +53,7 @@ function err() {
 }
 
 function debug() {
-    if [[ $(debugging) == on ]]; then
-        >&2 log DEBUG '>>>' "$@"
-    fi
+    >&2 log DEBUG '>>>' "$@"
 }
 
 debugging off

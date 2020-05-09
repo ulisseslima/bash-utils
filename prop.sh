@@ -21,13 +21,14 @@ if [[ ! -n "$newvalue" ]]; then
 fi
 
 if [ ! -f "$filename" ]; then
+	mkdir -p "$(dirname $filename)"
     touch "$filename"
 fi
 
 if ! grep -R "^[#]*\s*${thekey}=.*" $filename > /dev/null; then
   debug "APPENDING '${thekey}'"
-  echo "$thekey=$newvalue" >> $filename
+  echo "$thekey=${newvalue}" >> $filename
 else
   debug "SETTING '${thekey}'"
-  sed -ir "s/^[#]*\s*${thekey}=.*/$thekey=$newvalue/" $filename
+  sed -ir "s/^[#]*\s*${thekey}=.*/$thekey=${newvalue}/" $filename
 fi
