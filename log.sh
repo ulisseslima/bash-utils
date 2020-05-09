@@ -38,7 +38,7 @@ function log() {
 		shift
 	fi
 
-    if [[ $(debugging) == on ]]; then
+    if [[ $level == DEBUG && $(debugging) == on || $level != DEBUG ]]; then
     	echo "$indicator $(now.sh -dt) - ${FUNCNAME[2]}@${BASH_LINENO[1]}/$level: $@"
     fi
     echo "$MYSELF - $indicator $(now.sh -dt) - ${FUNCNAME[2]}@${BASH_LINENO[1]}/$level: $@" >> $logf
