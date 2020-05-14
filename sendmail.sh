@@ -34,13 +34,13 @@ fi
 verbose=false
 html=false
 server="smtp.gmail.com"
-port=465
-ssl=true
-tls=false
-from=$MAIL_USERNAME
+port=${MAIL_PORT:-465}
+ssl=${MAIL_SSL:-true}
+tls=${MAIL_TLS:-false}
+from="$MAIL_USERNAME"
 to=$from
-user=$MAIL_USERNAME
-passw=$MAIL_PASSW
+user="$MAIL_USERNAME"
+passw="$MAIL_PASSW"
 subject="unspecified"
 message="unspecified"
 attach=""
@@ -97,15 +97,15 @@ do
         ;;
         --password|--passw|-p)
         	shift
-        	passw=$1
+        	passw="$1"
         ;;
         --subject)
         	shift
-        	subject=$1
+        	subject="$1"
         ;;
         --message|-m)
         	shift
-        	message=$1
+        	message="$1"
         ;;
 	--attach|-a)
 		shift
