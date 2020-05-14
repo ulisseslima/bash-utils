@@ -37,11 +37,11 @@ debug() {
 while test $# -gt 0
 do
     case "$1" in
-	-v|-h)
-		echo "$0 v2.1"
+	--version)
+		echo "$0 v2.2"
 		exit 0
 	;;
-        --verbose|--debug)
+        --verbose|--debug|-v)
         	verbose=true
         ;;
         --help|-h)
@@ -56,6 +56,8 @@ do
 			exit 1
 		fi
 
+		debug "loading configs from external file: $config"
+		debug "$(cat $config)"
 		source $config
         ;;
         --html)
