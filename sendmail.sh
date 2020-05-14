@@ -1,11 +1,37 @@
 #!/bin/bash
-source /etc/profile
-
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 
-verbose=false
+do_help() {
+	echo "Usage example:"
+	echo "$0 --to email@domain.com"
+}
 
+say() {
+        echo "||| $0 - $1"
+}
+
+debug() {
+	if [ "$verbose" == "true" ]; then
+		say "$1"
+	fi
+}
+
+source /etc/profile
+if [[ "$1" == '--config' ]]; then
+	shift; config="$1"
+	if [ ! -f "$config" ]; then
+        	say "not a file: 'config'"
+        	exit 1
+        fi
+
+        say "loading configs from external file: $config"
+        say "$(cat $config)"
+        source $config
+	shift
+fi
+
+verbose=false
 html=false
 server="smtp.gmail.com"
 port=465
@@ -18,21 +44,6 @@ passw=$MAIL_PASSW
 subject="unspecified"
 message="unspecified"
 attach=""
-
-do_help() {
-	echo "Usage example:"
-	echo "$0 --to email@domain.com"
-}
-
-say() {
-        echo "||| $0 - $1"
-}
-
-debug() {
-	if [ $verbose == "true" ]; then
-		say "$1"
-	fi
-}
 
 while test $# -gt 0
 do
@@ -49,16 +60,8 @@ do
         	exit 0
         ;;
         --config)
-        	shift
-        	config=$1
-		if [ ! -f "$config" ]; then
-			say "not a file: 'config'"
-			exit 1
-		fi
-
-		debug "loading configs from external file: $config"
-		debug "$(cat $config)"
-		source $config
+		say "--config arg must be specified as first arg"
+		exit 1
         ;;
         --html)
         	shift
@@ -117,14 +120,14 @@ do
 done
 
 if [ $verbose == true ]; then
-	say "server $server"
-	say "port $port"
-	say "ssl $ssl"
-	say "tls $tls"
-	say "user $user"
-	say "from $from"
-	say "message $message"
-	say "password $passw"
+	say "server '$server'"
+	say "port '$port'"
+	say "ssl '$ssl'"
+	say "tls '$tls'"
+	say "user '$user'"
+	say "from '$from'"
+	say "message '$message'"
+	say "password '$passw'"
 fi
 
 echo "$MYDIR"
