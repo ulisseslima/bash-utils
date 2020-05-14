@@ -140,6 +140,11 @@ if [[ $html == true ]]; then
         fi
 fi
 
+if [[ ! -n "$to" ]]; then
+	say "no recipients specified"
+	exit 1
+fi
+
 java -jar \
 -Dhtml=$html \
 -Dserver=$server \
