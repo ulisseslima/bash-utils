@@ -48,6 +48,16 @@ do
         	do_help
         	exit 0
         ;;
+        --config)
+        	shift
+        	config=$1
+		if [ ! -f "$config" ]; then
+			say "not a file: 'config'"
+			exit 1
+		fi
+
+		source $config
+        ;;
         --html)
         	shift
         	html=$1
@@ -104,15 +114,6 @@ do
     shift
 done
 
-if [ "$passw" == 'unspecified' ]; then
-	read -s -p "$0 email password for $user: " passw
-fi
-
-say "sending mail to $to..."
-if [ -n "$attach" ]; then
-        say "attachments: $attach"
-fi
-
 if [ $verbose == true ]; then
 	say "server $server"
 	say "port $port"
@@ -140,9 +141,22 @@ if [[ $html == true ]]; then
         fi
 fi
 
+if [ "$passw" == 'unspecified' ]; then
+	read -s -p "$0 email password for $user: " passw
+fi
+
 if [[ ! -n "$to" ]]; then
 	say "no recipients specified"
 	exit 1
+fi
+if [[ ! -n "$user" ]]; then
+	say "no sender user specified"
+	exit 1
+fi
+
+say "sending mail to $to..."
+if [ -n "$attach" ]; then
+        say "attachments: $attach"
 fi
 
 java -jar \
