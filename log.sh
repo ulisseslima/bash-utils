@@ -62,8 +62,8 @@ do
     case "$var" in
         --verbose|--debug|-v)
             shift
-            echo "debug is on"
             debugging on
+            echo "debug turned on: $debugf"
         ;;
         --quiet|-q)
             shift
