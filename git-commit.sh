@@ -11,6 +11,17 @@ if [[ ! -n "$message" || "$message" == --tags ]]; then
 	exit 1
 fi
 
+if [[ "$message" == -r ]]; then
+	if [[ -f "$(real smerge)" ]]; then
+		# sublime merge
+		smerge .
+	else
+		git diff
+	fi
+
+	exit 1
+fi
+
 if [ ! -f ./.gitignore ]; then
 	err ".gitignore not found. create and try again."
 	exit 1
