@@ -1,4 +1,7 @@
 #!/bin/bash
+# e.g.:
+# start=$(elapsed.sh)
+# elapsed.sh $start
 
 start="$1"
 if [ ! -n "$start" ]; then

@@ -8,10 +8,12 @@ if [ "$1" == '--help' ]; then
 	exit 0
 fi
 
-hosts='cvs.murah smb.murah siecm.des.caixa caixa.murah.info.tm uol.com.br'
-if [[ -n $1 ]]; then
-        hosto=$1
+if [[ ! -n "$1" ]]; then
+	echo "first arg must be host list (separed by space)"
+	exit 1
 fi
+
+hosto="$1"
 
 sleepo=60
 if [[ -n $2 ]]; then
@@ -39,6 +41,6 @@ function test_hosts() {
 echo "Will ping $hosto every $sleepo seconds..."
 while true
 do
-	test_hosts $hosts
+	test_hosts $hosto
 	sleep $sleepo
 done

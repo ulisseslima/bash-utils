@@ -8,3 +8,4 @@ if [[ ! -f "$f" ]]; then
 fi
 
 wc -l "$f" | cut -d' ' -f1
+rm -f "$tmp"
