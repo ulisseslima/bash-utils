@@ -5,6 +5,8 @@ ME=$(basename $MYSELF)
 
 source $(real log.sh)
 
+REPO=$(git rev-parse --show-toplevel)
+
 message="$1"
 if [[ ! -n "$message" || "$message" == --tags ]]; then
 	err "first arg must be commit message"
@@ -22,7 +24,7 @@ if [[ "$message" == -r ]]; then
 	exit 1
 fi
 
-if [ ! -f ./.gitignore ]; then
+if [ ! -f "$REPO/.gitignore" ]; then
 	err ".gitignore not found. create and try again."
 	exit 1
 fi

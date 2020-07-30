@@ -1,4 +1,5 @@
 #!/bin/bash
+# gets a line number from a list
 
 if [[ $(nan.sh "$1") == true || "$1" -lt 1 ]]; then
 	echo "arg 1 has to be index number, 1-based"

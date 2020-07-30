@@ -5,8 +5,11 @@ case "$format" in
         DATE|-d|--date)
                 df="%Y-%m-%d"
         ;;
-        DT|DATET|DATETIME|DATE_TIME|-dt|--datetime|--date-time) 
+        DT|DATET|DATETIME|DATE_TIME|-dt|--datetime|--date-time)
                 df="%Y-%m-%d %H:%M:%S"
+        ;;
+        -f|--file)
+                df="%Y-%m-%d_%Hh%M"
         ;;
         T|TIME|-t|--time)
                 df="%H:%M:%S"
