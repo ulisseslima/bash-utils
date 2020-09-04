@@ -30,14 +30,19 @@ do
     fname=$(basename $file)
     fdir=$(dirname $file)
 
+    if [[ "$fname" == .* || $(basename "$fdir") == .* ]]; then
+        info "!!! IGNORE hidden: $file"
+        continue
+    fi
+
     mime=$(file -i $file)
     if [[ "$fname" == *.java ]]; then
-        info "merging source - $mime"
-        desdir="${fdir/$src/${des}/src}"
+        info ">SRC - merging - $mime"
+        desdir="${fdir/$src/${des}}"
         mkdir -p $desdir
     else
-        info "merging resource - $mime"
-        desdir="${fdir/$src/${des}/resources}"
+        info "#RES - merging - $mime"
+        desdir="${fdir/$src/${des}}"
         mkdir -p $desdir
     fi
 
