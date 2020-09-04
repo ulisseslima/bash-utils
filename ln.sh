@@ -1,16 +1,16 @@
 #!/bin/bash
-
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 ME=$(basename $MYSELF)
 
 app=$1
+instd=/usr/local/bin
 
 if [ ! -n "$app" ]; then
 	echo "$0: faster way o put an app on PATH"
 	echo "- takes an app from the current directory"
 	echo "- marks it as executable"
-	echo "- creates a link to it on /usr/bin"
+	echo "- creates a link to it on $instd"
 	echo ""
 	echo "first argument must be the app path (can be relative to working directory)"
 	exit 0
@@ -29,9 +29,9 @@ if [ -f "$(real $app)" ]; then
 fi
 
 sudo chmod +x "$abs" && \
-sudo ln -s "$abs" /usr/local/bin/$app_name
+sudo ln -s "$abs" "$instd/$app_name"
 
 ls -la $app_name
 
-echo "tesing new link..."
-$app_name
+echo "tesing new link for $app_name ..."
+$app_name --version

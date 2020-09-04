@@ -32,6 +32,6 @@ if [ -f "$link" ]; then
         sudo rm "$link"
 fi
 
-sudo ln -s "$rfile" "$link"
+chmod +x "$rfile" && sudo ln -s "$rfile" "$link"
 
-ls -la $(which "$link")
+ls -la $(which "$link_name")

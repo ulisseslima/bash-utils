@@ -19,7 +19,7 @@ convert_to_utf8() {
 	require.sh -f "$f"
 
 	encoding=$(check_encoding "$f")
-	if [[ "$encoding" != UTF-8 && "${encoding}" != *ASCII* ]]; then
+	if [[ "$encoding" != UTF-8 && "${encoding}" != *ASCII* && "$encoding" != BINARY ]]; then
 		iconv -f $encoding -t UTF-8//TRANSLIT "$f" -o /tmp/f
 		mv /tmp/f $destination
 	elif [[ "$f" != "$destination" ]]; then

@@ -21,7 +21,7 @@ if [[ "$message" == -r ]]; then
 		git diff
 	fi
 
-	exit 1
+	exit 0
 fi
 
 if [ ! -f "$REPO/.gitignore" ]; then
@@ -47,7 +47,8 @@ if [[ "$tags" == --tags ]]; then
 		exit 1
 	fi
 
-	git-tag.sh "$version" "$message"
+	changelogf="$3"
+	git-tag.sh "$version" "$message" "$changelogf"
 fi
 
 info "pulling..."
