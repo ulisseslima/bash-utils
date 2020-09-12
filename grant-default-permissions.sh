@@ -34,13 +34,16 @@ fi
 echo "giving ownership to $group ..."
 sudo chown -R :$group $dir
 
+echo "changing current permissions ..."
+sudo chmod -R 770 $dir
+
 echo "setting default permissions ..."
 # set gid:
 chmod g+s $dir
 # set group to rwx default:
-setfacl -d -m g::rwx $dir
+sudo setfacl -d -m g::rwx $dir
 # set other:
-setfacl -d -m o::rx $dir
+sudo setfacl -d -m o::rx $dir
 
 echo "check if it worked:"
 getfacl $dir

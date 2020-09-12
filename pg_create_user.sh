@@ -1,4 +1,5 @@
 #!/bin/bash
+# cria um usuário do postgres
 
 db="$1"
 if [[ ! -n "$db" ]]; then
@@ -18,6 +19,9 @@ schema='public'
 if [[ "$user" == *.* ]]; then
 	schema=$(echo $user | cut -d'.' -f2)
 fi
+
+port="${4:-5432}"
+host="${5:-localhost}"
 
 sql="CREATE USER $user WITH PASSWORD '$password';
 GRANT ALL PRIVILEGES ON DATABASE $db to $user;
@@ -45,4 +49,4 @@ echo "will create user '$user' with password '$password' on schema '$schema' wit
 echo "press enter to confirm or ctrl c to cancel"
 read confirmation
 
-psql -U postgres -c "$sql"
+psql -U postgres -h $host -p $port -c "$sql"
