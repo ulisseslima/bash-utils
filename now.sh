@@ -2,6 +2,9 @@
 format="$1"
 
 case "$format" in
+        WEEKDAY|-w|--weekday)
+                df="%u"
+        ;;
         DATE|-d|--date)
                 df="%Y-%m-%d"
         ;;
