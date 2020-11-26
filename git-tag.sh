@@ -27,24 +27,29 @@ elif [[ "$v" == *SNAPSHOT* ]]; then
 	info "$v is snapshot, no tag will be created"
 else
 	info "will create tag $v..."
+
 	# readme
-	changelog="$3"
+	changelog="${3:-changelog.md}"
 	if [ -f "$changelog" ]; then
+		skip=$(grep -c "$msg" $changelog || true)
+
 		info "found changelog $changelog"
 		today=$(now.sh --date)
 		info "today: $today"
 
-		new_change=$(grep -c "$v" "$changelog" || true)
-		if [[ "$new_change" -eq 0 ]]; then
-			info "creating changelog entry..."
-			changetype=$(echo "$msg" | cut -d' ' -f1)
-			echo && echo >> $changelog
-			echo "## [$v] - $today" >> $changelog
-			echo "### ${changetype^}" >> $changelog
-		fi
+		if [[ $skip -eq 0 ]]; then
+			new_change=$(grep -c "$v" "$changelog" || true)
+			if [[ "$new_change" -eq 0 ]]; then
+				info "creating changelog entry..."
+				changetype=$(echo "$msg" | cut -d' ' -f1)
+				echo && echo >> $changelog
+				echo "## [$v] - $today" >> $changelog
+				echo "### ${changetype^}" >> $changelog
+			fi
 
-		info "adding changelog message: $msg"
-		echo "- @$USER - ${msg}" >> $changelog
+			info "adding changelog message: $msg"
+			echo "- @$USER - ${msg}" >> $changelog
+		fi
 
 		info "tagging as $v..."
 		git commit -a -m "changelog"

@@ -11,4 +11,8 @@
 # - fps
 # - out name
 
-ffmpeg -i blender-%04d.png -c:v libx264 -vf fps=29.97 -pix_fmt yuv420p out.mp4
+ffmpeg -i %05d.png -c:v libx264 -r 24 -pix_fmt yuv420p out-r.mp4
+#ffmpeg -i %05d.png -c:v libx264 -framerate 24 -pix_fmt yuv420p out.mp4
+#ffmpeg -i %05d.png -c:v libx264 -vf fps=24 -pix_fmt yuv420p out.mp4
+#ffmpeg -i frame-%04d.png -c:v libx264 -vf fps=29.97 -pix_fmt yuv420p out.mp4
+#ffmpeg -i frame-%04d.png -c:v libx264 -vf fps=24 -pix_fmt yuv420p out.mp4

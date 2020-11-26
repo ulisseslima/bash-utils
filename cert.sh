@@ -50,20 +50,20 @@ do_test() {
 while test $# -gt 0
 do
     case "$1" in
-        --help) 
+        --help)
             do_help
         ;;
         --install|-i)
-            shift 
+            shift
             cert_file="$1"
             op="install"
         ;;
-        --remove|-r) 
+        --remove|-r)
             shift
         	cert_file="$1"
             op="remove"
         ;;
-        --gen|-g) 
+        --gen|-g)
             shift
             op="generate"
         ;;
@@ -85,10 +85,10 @@ do
 
             exit 0
         ;;
-        --*) 
+        --*)
             echo "bad option $1"
         ;;
-        *) 
+        *)
             echo "Usage: $0 {install|remove}"
         ;;
     esac
@@ -105,10 +105,10 @@ echo "java home: $jhome"
 echo "jre home: $jrehome"
 
 case "$op" in
-    install) 
+    install)
         do_install
     ;;
-    *) 
+    *)
         echo "Operation not implemented: $op"
     ;;
 esac

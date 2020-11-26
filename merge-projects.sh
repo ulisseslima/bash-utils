@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# merges a project into another
+# merges a java project into another
 
 source $(real require.sh)
 
@@ -11,8 +11,6 @@ require -d "$des"
 
 info "will merge '$src' into '$des', proceed?"
 read confirmation
-
-cd $WORKING_DIR
 
 info "files before merge: $(find $des | wc -l)"
 info "moving files..."

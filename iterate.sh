@@ -15,6 +15,7 @@ fi
 
 if [ ! -n "$2" ]; then
 	echo "arg 2 hast to be iterator expression"
+	echo 'dont use double quotes. use $line for the current line and $n for the line number'
 	exit 1
 fi
 
