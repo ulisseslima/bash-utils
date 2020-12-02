@@ -26,32 +26,36 @@ function debug() {
 }
 
 require() {
-    switch='-s'
-    if [[ "$1" == *'-'* ]]; then
-        switch=$1
-        shift
-    fi
+        switch='-s'
+        if [[ "$1" == *'-'* ]]; then
+            switch=$1
+            shift
+        fi
 
-    case $switch in
-      --string|-s)
-        if [ ! -n "$1" ]; then
-            err "$2"
-            exit 1
-        fi
-      ;;
-      --file|-f)
-        if [ ! -f "$1" ]; then
-            err "not a file: '$1'. $2"
-            exit 1
-        fi
-      ;;
-      --dir|-d)
-        if [ ! -d "$1" ]; then
-            err "not a directory: '$1'. $2"
-            exit 1
-        fi
-      ;;
-    esac
+	keyname="$1"
+	value="${!keyname}"
+	info="$2"
+
+        case $switch in
+          --string|-s)
+                if [ ! -n "$value" ]; then
+                    log "required variable has no value - $keyname: $info"
+                    return 1
+                fi
+          ;;
+          --file|-f)
+                    if [ ! -f "$value" ]; then
+                        log "an expected file was not found: '$value' (varname: $keyname) - $info"
+                        return 2
+                fi
+          ;;
+          --dir|-d)
+                if [ ! -d "$value" ]; then
+                    log "an expected dir was not found: '$value' (varname: $keyname) - $info"
+                    return 3
+                fi
+          ;;
+        esac
 }
 
-require "$@"
+#test $# -gt 0 && require "$@"
