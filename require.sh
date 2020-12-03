@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function log() {
+function llog() {
     >&2 echo "$@"
 }
 
@@ -18,19 +18,19 @@ require() {
     case $switch in
         --string|-s)
             if [ ! -n "$value" ]; then
-                log "required variable has no value - $keyname: $info"
+                llog "required variable has no value - $keyname: $info"
                 exit 1
             fi
         ;;
         --file|-f)
                 if [ ! -f "$value" ]; then
-                    log "an expected file was not found: '$value' (varname: $keyname) - $info"
+                    llog "an expected file was not found: '$value' (varname: $keyname) - $info"
                     exit 2
             fi
         ;;
         --dir|-d)
             if [ ! -d "$value" ]; then
-                log "an expected dir was not found: '$value' (varname: $keyname) - $info"
+                llog "an expected dir was not found: '$value' (varname: $keyname) - $info"
                 exit 3
             fi
         ;;
