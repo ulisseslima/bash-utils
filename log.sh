@@ -3,7 +3,7 @@ MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 ME=$(basename $MYSELF)
 
-logf=/tmp/general.log
+logf=$HOME/general.log
 
 function debugging() {
     verbose=${1}
