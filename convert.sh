@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+source $(real require.sh)
+source $(real log.sh)
+
 convert_to_mp3() {
 	f="$1"
 	flac -cd "$f" | lame -b 320 - "${f%.*}".mp3
@@ -35,6 +38,20 @@ check_encoding() {
 	echo ${encoding^^}
 }
 
+# export only keyframes so it's not a huge output
+export_keyframes() {
+	f="$1"
+	require.sh -f "$f"
+
+	mime=$(file "$f")
+	if [[ "$mime" != *MP4* ]]; then
+		err "only MP4 supported"
+		exit 1
+	fi
+
+	ffmpeg -skip_frame nokey -i "$f" -vsync 0 -f image2 frame-%02d.jpg
+}
+
 while test $# -gt 0
 do
     case "$1" in
@@ -51,11 +68,15 @@ do
         	check_encoding "$1"
 		;;
 		--all-to-mp3)
-				convert_all_to_mp3
+			convert_all_to_mp3
+		;;
+		--keyframes)
+			shift
+			export_keyframes "$1"
 		;;
 		--*) 
-				echo "bad option $1"
-				exit 1
+			echo "bad option $1"
+			exit 1
 		;;      
     esac
     shift
