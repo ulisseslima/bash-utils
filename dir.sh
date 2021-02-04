@@ -8,3 +8,4 @@ fi
 
 link=$(readlink -f "$1")
 dirname "$link"
+dirname "cd $link" | ctrlc.sh
