@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cmd="$1"
+file=$(real "$cmd")
+
+echo "$(dirname $file)"
+echo "cd $(dirname $file)" | ctrlc.sh
