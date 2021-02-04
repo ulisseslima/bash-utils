@@ -18,7 +18,7 @@ require() {
     case $switch in
         --string|-s)
             if [ ! -n "$value" ]; then
-                llog "required variable has no value - $keyname: $info"
+                llog "required variable has no value: $keyname = '$info'"
                 exit 1
             fi
         ;;
