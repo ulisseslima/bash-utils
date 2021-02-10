@@ -25,7 +25,7 @@ i=0
 n=1
 while read line
 do
-	eval echo $2
+	eval >&2 echo $2
 	((i++))
 	((n++))
 done < <(echo "$1")
