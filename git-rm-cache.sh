@@ -7,7 +7,7 @@ resource="$1"
 
 if [[ ! -f "$resource" ]]; then
     if [[ ! -d "$resource" ]]; then
-        err "'$resource' is not a file or directory"
+        echo "'$resource' is not a file or directory"
         exit 1
     fi
 fi
