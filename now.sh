@@ -17,6 +17,12 @@ case "$format" in
         T|TIME|-t|--time)
                 df="%H:%M:%S"
         ;;
+        H|HOUR|-h|--hour)
+                df="%H"
+        ;;
+        D|DAY|--day)
+                df="%d"
+        ;;
         *)
 		echo $(($(date +%s%N)/1000000))
 		exit 0
