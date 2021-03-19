@@ -106,6 +106,9 @@ do
         --message|-m)
         	shift
         	message="$1"
+		if [[ -f "$message" ]]; then
+			message=$(cat "$message")
+		fi
         ;;
 	--attach|-a)
 		shift
