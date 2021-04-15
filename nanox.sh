@@ -1,3 +1,7 @@
 #!/bin/bash
 
-nano $(real "$1")
+p=$(real "$1")
+editor=${2:-nano}
+
+echo "$editor $p"
+$editor "$p"
