@@ -1,8 +1,8 @@
 #!/bin/bash
 # adds a group to current user
 
-user=$USER
 group="$1"
+user=${2:-$USER}
 
 echo "adding '$user' to '$group'..."
 sudo usermod -aG $group $user
