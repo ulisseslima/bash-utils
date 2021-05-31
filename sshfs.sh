@@ -1,18 +1,61 @@
-#!/bin/bash
+#!/bin/bash -e
 # mount a ssh host directory locally
 
-host="$1"
-user=${2:-$USER}
-mp=${3:-.}
+user="$USER"
+mountpoint='.'
 
-echo "will mount $user@$host:$mp at ~/$host, continue?"
+while test $# -gt 0
+do
+    case "$1" in
+        --host|-h)
+            shift
+            host="$1"
+        ;;
+        --user|-u)
+            shift
+            user="$1"
+        ;;
+        --mountpoint|-m)
+            shift
+            mountpoint="$1"
+        ;;
+        --localpoint|-l)
+            shift
+            localpoint="$1"
+        ;;
+        --ummount)
+            shift
+            dir="$1"
+            fusermount -u $dir
+        ;;
+        *)
+            echo "bad option: '$1'"
+            exit 1
+        ;;
+    esac
+    shift
+done
+
+[[ -z "$localpoint" ]] && localpoint="$HOME/$host/$(basename $mountpoint)"
+
+echo "will mount $user@$host:$mountpoint at $localpoint, continue?"
 read confirmation
 
-test -e ~/$host || mkdir --mode 700 ~/$host
-sshfs $user@$host:$mp ~/$host -p 22
+if [[ ! -d "$localpoint" ]]; then
+    echo "creating local point: $localpoint"
+    sudo mkdir -p "$localpoint"
+    sudo chown -R $USER:$USER "$localpoint"
+fi
 
-nautilus ~/$host
+echo "testing local point..."
+test -e $localpoint || mkdir --mode 700 $localpoint
 
-# ummount:
-# fusermount -u ~/$host
+echo "mounting remote point: $user@$host:$mountpoint"
+sshfs $user@$host:$mountpoint $localpoint -p 22
 
+if [[ -d "$localpoint" ]]; then
+    echo "browsing $localpoint ..."
+    nautilus $localpoint
+else
+    echo "something went wrong creating $localpoint"
+fi
