@@ -53,6 +53,9 @@ test -e $localpoint || mkdir --mode 700 $localpoint
 echo "mounting remote point: $user@$host:$mountpoint"
 sshfs $user@$host:$mountpoint $localpoint -p 22
 
+echo "testing:"
+df -h | grep "$user@$host:$mountpoint"
+
 if [[ -d "$localpoint" ]]; then
     echo "browsing $localpoint ..."
     nautilus $localpoint
