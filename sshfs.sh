@@ -107,8 +107,7 @@ df -h | grep "$user@$host:$mountpoint"
 ls -lt $localpoint | head -5
 
 if [[ -d "$localpoint" ]]; then
-    echo "browsing $localpoint ..."
-    nautilus $localpoint
+    echo "you can now browse $localpoint"
 else
     echo "something went wrong creating $localpoint"
 fi
