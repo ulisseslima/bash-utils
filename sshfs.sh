@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# mount a ssh host directory locally
+# mount a ssh host directory locally using sshfs
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 ME=$(basename $MYSELF)
@@ -102,9 +102,14 @@ sshfs \
     -o IdentityFile=$pubk \
     $user@$host:$mountpoint $localpoint -p 22
 
-echo "testing:"
+echo "listing:"
 df -h | grep "$user@$host:$mountpoint"
 ls -lt $localpoint | head -5
+
+echo "testing r/w:"
+testf="$localpoint/${USER}.testf"
+touch "$testf"
+rm "$testf"
 
 if [[ -d "$localpoint" ]]; then
     echo "you can now browse $localpoint"
