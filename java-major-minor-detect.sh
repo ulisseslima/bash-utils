@@ -1,4 +1,5 @@
 #!/bin/bash
+# 51 = 7, 82 = 8 ...
 
 file="$(readlink -f $1)"
 
