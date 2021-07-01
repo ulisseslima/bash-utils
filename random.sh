@@ -1,14 +1,17 @@
 #!/bin/bash
+# pops a random line from a file'
 
-f="$1"
-if [ ! -f "$f" ]; then
-	echo 'pops a random line from a file'
-	echo 'first arg must be an existing file'
-	exit 1
+in=/dev/stdin
+f="${1}"
+if [[ -f "$f" ]]; then
+	in="$f"
 fi
 
-n=$(cat "$f" | wc -l)
+contents="/tmp/contents"
+cat $in > $contents
+
+n=$(cat "$contents" | wc -l)
 random=$(((RANDOM % $n) +1))
-word=$(cat "$f" | head -$random | tail -1)
+word=$(cat "$contents" | head -$random | tail -1)
 
 echo $word
