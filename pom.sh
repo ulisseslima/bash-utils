@@ -35,10 +35,20 @@ function do_edit() {
 
 # selects project version, or parent version, if undefined.
 function select_version() {
-    local v=$(do_select "$1" 'x:project/x:version' || true)
+    local file="$1"
+    if [[ -d "$file" ]]; then
+        file="$file/pom.xml"
+    fi
+
+    if [[ ! -f "$file" ]]; then
+        err "arg 1 must be a pom file"
+        exit 1
+    fi
+
+    local v=$(do_select "$file" 'x:project/x:version' || true)
     if [[ ! -n "$v" ]]; then
         debug "falling back to parent/version..."
-        v=$(do_select "$1" 'x:project/x:parent/x:version')
+        v=$(do_select "$file" 'x:project/x:parent/x:version')
     fi
 
     echo "$v"
