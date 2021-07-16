@@ -31,6 +31,22 @@ function do_edit() {
         -u "$query" -v "$value" \
         $file
     debug "value changed."
+
+    if [[ -n "$dependents" ]]; then
+        >&2 echo "changing dependents: $dependents"
+
+        dependency=$(dirname $file | rev | cut -d'/' -f1 | rev)
+
+        while read dependent
+        do
+            if [[ -f $dependent ]]; then
+                >&2 echo "changing $dependency on $dependent to $value ..."
+                xmlstarlet ed -L -N x=$NAMESPACE \
+                    -u "x:project/x:dependencyManagement/x:dependencies/x:dependency[x:artifactId='$dependency']/x:version" -v "$value" \
+                    $dependent
+            fi
+        done < <(echo "$dependents" | tr ' ' '\n')
+    fi
 }
 
 # selects project version, or parent version, if undefined.
@@ -109,6 +125,10 @@ do
         --file|-f)
             shift
             f="$1"
+        ;;
+        --dependents)
+            shift
+            dependents="$1"
         ;;
         --select|-s)
             if [[ -z "$f" ]]; then
