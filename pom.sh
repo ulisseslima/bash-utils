@@ -106,38 +106,55 @@ do
         --verbose|-v) 
             debugging on
         ;;
+        --file|-f)
+            shift
+            f="$1"
+        ;;
         --select|-s)
-            shift; f="$1"
+            if [[ -z "$f" ]]; then
+                shift; f="$1"
+            fi
             shift; q="$1"
 
             do_select "$f" "$q"
         ;;
         --edit|-e)
-            shift; file="$1"
+            if [[ -z "$f" ]]; then
+                shift; f="$1"
+            fi
             shift; query="$1"
             shift; value="$1"
 
             do_edit "$file" "$query" "$value"
         ;;
         --project-version|--version)
-            shift; file="$1"
-            select_version "$file"
+            if [[ -z "$f" ]]; then
+                shift; f="$1"
+            fi
+            select_version "$f"
         ;;
         --set)
-            shift; file="$1"
+            if [[ -z "$f" ]]; then
+                shift; f="$1"
+            fi
             shift; version="$1"
-            set_version "$file" "$version"
+            set_version "$f" "$version"
         ;;
-        --bump-build|-b)
-            shift; f="$1"
+        --bump-build|--bump|-b)
+            if [[ -z "$f" ]]; then
+                shift; f="$1"
+            fi
             bump_build "$f"
         ;;
         --snap|--open|-o)
-            shift; f="$1"
+            if [[ -z "$f" ]]; then
+                shift; f="$1"
+            fi
             reopen_version "$f"
         ;;
         -*)
             echo "bad option '$1'"
+            exit 1
         ;;
     esac
     shift
