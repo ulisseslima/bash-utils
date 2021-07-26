@@ -20,6 +20,9 @@ case "$format" in
         H|HOUR|-h|--hour)
                 df="%H"
         ;;
+        M|--min|--minute)
+                df="%M"
+        ;;
         D|DAY|--day)
                 df="%d"
         ;;

@@ -88,6 +88,15 @@ function set_version() {
 # if SNAPSHOT, just closes it without incrementing.
 function bump_build() {
     local file="$1"
+    if [[ -d "$file" ]]; then
+        file="$file/pom.xml"
+    fi
+
+    if [[ ! -f "$file" ]]; then
+        err "arg 1 must be a pom file"
+        exit 1
+    fi
+
     local v=$(select_version "$file")
 
     if [[ "$v" == *SNAPSHOT* ]]; then
