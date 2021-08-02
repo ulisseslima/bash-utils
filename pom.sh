@@ -57,7 +57,7 @@ function select_version() {
     fi
 
     if [[ "$file" == "/dev/stdin" ]]; then
-        echo "reading from stdin..."
+        debug "reading from stdin..."
         tmp=/tmp/pom.xml
         cat /dev/stdin > $tmp
         file=$tmp
