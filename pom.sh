@@ -56,8 +56,14 @@ function select_version() {
         file="$file/pom.xml"
     fi
 
-    first_byte=$(dd bs=1 count=1 2>/dev/null | od -t o1 -A n | tr -dc 0-9)
-    if [[ ! -f "$file" && -z "$first_byte" ]]; then
+    if [[ "$file" == "/dev/stdin" ]]; then
+        echo "reading from stdin..."
+        tmp=/tmp/pom.xml
+        cat /dev/stdin > $tmp
+        file=$tmp
+    fi
+
+    if [[ ! -f "$file" ]]; then
         err "arg 1 must be a pom file"
         exit 1
     fi
