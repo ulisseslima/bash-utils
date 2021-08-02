@@ -56,7 +56,8 @@ function select_version() {
         file="$file/pom.xml"
     fi
 
-    if [[ ! -f "$file" ]]; then
+    first_byte=$(dd bs=1 count=1 2>/dev/null | od -t o1 -A n | tr -dc 0-9)
+    if [[ ! -f "$file" && -z "$first_byte" ]]; then
         err "arg 1 must be a pom file"
         exit 1
     fi
