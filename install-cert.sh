@@ -87,7 +87,7 @@ if [[ "$existing" == *${HOST}* ]]; then
 
 	if [[ "${remove,,}" != 'n' ]]; then
 		echo "removing certificate for $HOST"
-		$kt -delete -alias $HOST -keystore "$cacerts" -storepass "$KEYSTOREPASS"
+		$kt -delete -alias $HOST -keystore "$cacerts" -storepass "$KEYSTOREPASS" || true
 	else
 		exit 0
 	fi
