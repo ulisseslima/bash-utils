@@ -6,8 +6,7 @@ CERTF=
 KEYSTOREPASS=changeit
 just_check=false
 
-first_byte=$(dd bs=1 count=1 2>/dev/null | od -t o1 -A n | tr -dc 0-9)
-if [ -n "$first_byte" ]; then
+if [ ! -t 0 ]; then
 	echo "reading certificate from stdin..."
 	CERTF=/dev/stdin
 fi
