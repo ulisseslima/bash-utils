@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# move files that are not java out of src
+# move file structure
 
 if [ ! -n "$1" ]; then
 	echo "arg 1 must be the file pattern"
