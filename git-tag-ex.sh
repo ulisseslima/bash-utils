@@ -12,7 +12,7 @@ do
 			shift
 			changelog="$1"
 		;;
-		-v|--version)
+		--version)
 			shift
 			version="$1"
 		;;
@@ -46,13 +46,10 @@ elif [[ "$version" == *SNAPSHOT* ]]; then
 	info "$version is snapshot, no tag will be created"
 else
 	info "will create tag $version ..."
-	info "related issues: "
 	header=$(echo "$changes" | grep ':' | cut -d'-' -f3 | cut -d':' -f1 | tr -d ' ' | tr '\n' ' ')
-
-	info "tagging as $version ..."
-	git tag -a $version -m "$header
 	
-	$changes"
+	info "tagging as $version ..."
+	git tag -a $version -m "$changes"
 
 	info "pushing tag $version"
 	git push --tags
