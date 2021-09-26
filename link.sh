@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 linkp=/usr/local/bin
 
@@ -17,8 +17,6 @@ if [ ! -f "$rfile" ]; then
 	exit 1
 fi
 
-echo "creating link for $rfile in $linkp..."
-
 link_name=$(basename "$rfile")
 if [ -n "$2" ]; then
 	link_name="$2"
@@ -27,10 +25,18 @@ fi
 rdir=$(dirname "$rfile")
 
 link="$linkp/$link_name"
-if [ -f "$link" ]; then
+broken_link_check="$(file "$link")"
+if [[ -f "$link" ]]; then
+	ls -la "$link"
 	echo "removing previous link..."
-        sudo rm "$link"
+    sudo rm "$link"
+elif [[ "$(echo "$broken_link_check" | grep -c broken || true)" == 1 ]]; then
+	echo "$broken_link_check"
+	echo "removing broken link..."
+	sudo rm "$link"
 fi
+
+echo "creating link for $rfile in $linkp as $link_name ..."
 
 chmod +x "$rfile" && sudo ln -s "$rfile" "$link"
 
