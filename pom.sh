@@ -5,6 +5,7 @@ MYDIR="${MYSELF%/*}"
 ME=$(basename $MYSELF)
 
 source $(real log.sh)
+source $(real require.sh)
 
 NAMESPACE='http://maven.apache.org/POM/4.0.0'
 
@@ -12,8 +13,8 @@ function do_select() {
     local file="$1"
     local query="$2"
 
-    require.sh -f "$file" "arg 1 should be the pom file location"
-    require.sh "$query" "arg 2 should be the xpath query, maven pom namespace prefix is 'x:'"
+    require -f file "arg 1 should be the pom file location"
+    require query "arg 2 should be the xpath query, maven pom namespace prefix is 'x:'"
 
     xmlstarlet sel -N x=$NAMESPACE -t -v "$query" $file
 }
@@ -23,8 +24,11 @@ function do_edit() {
     local query="$2"
     local value="$3"
 
+    require -f file "pom.xml"
+
+    debug "acquiring currval from '$file' using query '$query' ..."
     currval=$(do_select "$file" "$query")
-    require.sh "$value" "arg 3 should be the replacement value"
+    require value "arg 3 should be the replacement value"
 
     debug "editing $file $query from $currval to $value..."
     xmlstarlet ed -L -N x=$NAMESPACE \
@@ -161,7 +165,7 @@ do
             shift; query="$1"
             shift; value="$1"
 
-            do_edit "$file" "$query" "$value"
+            do_edit "$f" "$query" "$value"
         ;;
         --project-version|--version)
             if [[ -z "$f" ]]; then
