@@ -1,4 +1,5 @@
 #!/bin/bash
+# tests a if a required variable name is not empty, just source this script into yours
 
 function llog() {
     >&2 echo "$@"
@@ -11,9 +12,9 @@ require() {
         shift
     fi
 
-	keyname="$1"
-	value="${!keyname}"
-	info="$2"
+	local keyname="$1"
+	local value="${!keyname}"
+	local info="$2"
 
     case $switch in
         --string|-s)
@@ -23,18 +24,16 @@ require() {
             fi
         ;;
         --file|-f)
-                if [ ! -f "$value" ]; then
-                    llog "an expected file was not found: '$value' (varname: $keyname) - $info"
-                    exit 2
+            if [ ! -f "$value" ]; then
+                llog "a required file was not found: '$value' (varname: $keyname) - $info"
+                exit 2
             fi
         ;;
         --dir|-d)
             if [ ! -d "$value" ]; then
-                llog "an expected dir was not found: '$value' (varname: $keyname) - $info"
+                llog "a required dir was not found: '$value' (varname: $keyname) - $info"
                 exit 3
             fi
         ;;
     esac
 }
-
-#test $# -gt 0 && require "$@"
