@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-linkp=/usr/local/bin
+linkp=/usr/bin
 
 file="$1"
 if [ ! -n "$file" ]; then
