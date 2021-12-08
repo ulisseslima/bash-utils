@@ -10,6 +10,11 @@ require() {
     if [[ "$1" == *'-'* ]]; then
         switch=$1
         shift
+
+        if [[ $switch == "--in" ]]; then
+            collection="$1"
+            shift
+        fi
     fi
 
 	local keyname="$1"
@@ -18,8 +23,24 @@ require() {
 
     case $switch in
         --string|-s)
-            if [ ! -n "$value" ]; then
-                llog "required variable has no value: $keyname = '$info'"
+            if [[ -z "$value" ]]; then
+                llog "required variable has no value: $keyname ($info)"
+                exit 1
+            fi
+        ;;
+        --number|-n)
+            if [[ -z "$value" ]]; then
+                llog "required variable has no value: $keyname ($info)"
+                exit 1
+            elif [[ $(nan.sh "$value") == true ]]; then
+                llog "not a number: $keyname = '$value'"
+                exit 1
+            fi
+        ;;
+        --in)
+            # FIXME @unsafe can give false positives
+            if [[ -z "$value" || "$collection" != *"$value"* ]]; then
+                llog "$keyname: not one of: '$collection'"
                 exit 1
             fi
         ;;
