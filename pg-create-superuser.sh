@@ -33,6 +33,9 @@ host="${4:-localhost}"
 port="${5:-5432}"
 
 sql="CREATE USER $user WITH PASSWORD '$password';
+grant connect on database $db to $user;
+grant usage on schema $schema to $user;
+
 GRANT ALL PRIVILEGES ON DATABASE $db to $user;
 grant all privileges on schema $schema to $user;
 

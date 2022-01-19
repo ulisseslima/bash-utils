@@ -32,6 +32,7 @@ require database
 require schema
 require password
 
+echo "execute this while connected to the database you want access to:"
 echo "
 CREATE USER $user WITH PASSWORD '$password';
 grant connect on database $database to $user;
