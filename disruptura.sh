@@ -31,6 +31,9 @@ alternativamente
 incôngruo
 e idempotente
 pelo mindset
+top of mind
+num brainstorm
+sustentado por sua arquitetura hexagonal
 integral
 pela falsa dicotomia
 paralelamente
@@ -43,6 +46,17 @@ cerceante
 do estado da arte
 ahead-of-time
 da análise preemptiva
+tal complexidade
+federado
+suplementado
+porém modularizado
+sem ser modular
+sindicação
+compilado
+às vezes ingerenciável
+passando pelo worflow
+sistematizado
+nem pelo portal
 das equipes,'
 
 particles='do
