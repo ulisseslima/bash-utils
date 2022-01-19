@@ -37,6 +37,15 @@ require() {
                 exit 1
             fi
         ;;
+        --nan|-N)
+            if [[ -z "$value" ]]; then
+                llog "required variable has no value: $keyname ($info)"
+                exit 1
+            elif [[ $(nan.sh "$value") == false ]]; then
+                llog "should not be a number: $keyname = '$value'"
+                exit 1
+            fi
+        ;;
         --in)
             # FIXME @unsafe can give false positives
             if [[ -z "$value" || "$collection" != *"$value"* ]]; then
