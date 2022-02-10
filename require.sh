@@ -47,7 +47,7 @@ require() {
             fi
         ;;
         --math-expression|-nx)
-            local no_expression=$(echo "$value" | sed -e 's:[*/+-]::g')
+            local no_expression=$(echo "$value" | sed -e 's:[*/+-\(\)]::g')
             if [[ -z "$value" ]]; then
                 llog "required variable has no value: $keyname ($info)"
                 exit 1
