@@ -5,6 +5,12 @@ case "$format" in
         WEEKDAY|-w|--weekday)
                 df="%u"
         ;;
+        MONTH|-m|--month)
+                df="%m"
+        ;;
+        YEAR|-y|--year)
+                df="%Y"
+        ;;
         DATE|-d|--date)
                 df="%Y-%m-%d"
         ;;
