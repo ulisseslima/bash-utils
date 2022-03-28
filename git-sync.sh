@@ -25,19 +25,19 @@ require target
 
 current=$(git-curr-branch.sh)
 if [[ "$target" == "$current" ]]; then
-    err "target cannot be the same as the current branch"
+    echo "target cannot be the same as the current branch"
     exit 1
 fi
 
-info "syncing with $target ... from $current"
+echo "syncing with $target ... from $current"
 
 git checkout $target
 git pull
 git checkout $current
 git merge $target
 if [[ $(git status | grep -ci 'Your branch is ahead' || true) -gt 0 ]]; then
-    info "detected $current ahead of $target, pushing changes"
+    echo "detected $current ahead of $target, pushing changes"
     git push
 fi
 
-info "$current is synced with $target"
+echo "$current is synced with $target"
