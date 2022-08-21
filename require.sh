@@ -75,5 +75,50 @@ require() {
 				exit 3
 			fi
 		;;
+        --any)
+			local vars=
+			local ok=false
+			while test $# -gt 0
+			do
+				local key="$1"
+				local val="${!key}"
+
+				vars="$vars, $key"
+
+				if [[ -n "$val" ]]; then
+					ok=true
+					break
+				fi
+
+				shift
+			done
+
+			if [[ $ok == false ]]; then
+				llog "at least one of the subsequent variables should be set: $vars"
+				exit 4
+			fi
+		;;
+		--one)
+			local vars=
+			local one=
+			while test $# -gt 0
+			do
+				local key="$1"
+				local val="${!key}"
+
+				vars="$vars, $key"
+
+				if [[ "$one" == set && -n "$val" ]]; then
+					llog "only one of the subsequent variables should be set: $vars"
+					exit 5
+				fi
+
+				if [[ -n "$val" ]]; then
+					one=set
+				fi
+
+				shift
+			done
+		;;
 	esac
 }
