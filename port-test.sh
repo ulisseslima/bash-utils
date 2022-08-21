@@ -1,4 +1,5 @@
 #!/bin/bash
+# checks if a port is being used (OK) or not (FAIL)
 
 ip=$1
 port=$2

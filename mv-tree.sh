@@ -1,5 +1,6 @@
 #!/bin/bash -e
 # move file structure
+# e.g.: mv-tree '*' /proj-1/src/main/java /proj-2/src/main/java
 
 if [ ! -n "$1" ]; then
 	echo "arg 1 must be the file pattern"
