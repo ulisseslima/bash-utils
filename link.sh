@@ -25,6 +25,7 @@ fi
 rdir=$(dirname "$rfile")
 
 link="$linkp/$link_name"
+# TODO test: this returned 1 when a pre existing link did not exist, exiting the script
 broken_link_check="$(file "$link")"
 if [[ -f "$link" ]]; then
 	ls -la "$link"

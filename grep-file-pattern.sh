@@ -3,6 +3,12 @@
 
 source $(real require.sh)
 
+if [[ $# -eq 0 ]]; then
+	echo "usage:"
+	echo "$0 pattern string-to-search start-dir"
+	exit 1
+fi
+
 fpattern="$1"
 search="$2"
 dstart="$3"

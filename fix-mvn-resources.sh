@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# move files that are not java out of src
+# move files that are not java out of src, and java files out of resources
 
 src=$(readlink -f "$1")
 res=$(readlink -f "$2")

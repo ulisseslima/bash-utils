@@ -1,4 +1,5 @@
 #!/bin/bash
+# to install from url, use install-cert.sh
 
 nargs=$#
 

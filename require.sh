@@ -56,8 +56,10 @@ require() {
 				exit 1
 			fi
 		;;
+		# e.g.: require --in 'VAL_A VAL_B' var_a
+		# var_a's value should contain one of the values specified
 		--in)
-			# FIXME @unsafe can give false positives
+			# FIXME @unsafe can give false positives.
 			if [[ -z "$value" || "$collection" != *"$value"* ]]; then
 				llog "$keyname: not one of: '$collection'"
 				exit 1
@@ -75,7 +77,9 @@ require() {
 				exit 3
 			fi
 		;;
-        --any)
+		# e.g.: require --any var_a var_b [var_c ...]
+                # at least one of the vars has to be set
+	        --any)
 			local vars=
 			local ok=false
 			while test $# -gt 0
@@ -98,6 +102,8 @@ require() {
 				exit 4
 			fi
 		;;
+		# e.g.: require --one var_a var_b [var_c ...]
+		# if none or more than one of those is set, it fails.
 		--one)
 			local vars=
 			local one=
@@ -119,6 +125,11 @@ require() {
 
 				shift
 			done
+
+			if [[ -z "$one" ]]; then
+				llog "one of these variables should be set: $vars"
+				exit 5
+			fi
 		;;
 	esac
 }
