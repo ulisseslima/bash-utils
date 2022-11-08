@@ -28,6 +28,8 @@ convert_to_utf8() {
 	elif [[ "$f" != "$destination" ]]; then
 		mv "$f" "$destination"
 	fi
+
+	echo $encoding
 }
 
 check_encoding() {
