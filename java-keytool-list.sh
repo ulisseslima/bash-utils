@@ -1,6 +1,6 @@
 #!/bin/bash
 
-jh="${1:-JAVA_HOME}"
+jh="${1:-$JAVA_HOME}"
 kt="$jh/bin/keytool"
 cacerts="$jh/jre/lib/security/cacerts"
 

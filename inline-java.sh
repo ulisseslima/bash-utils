@@ -25,7 +25,7 @@ else
 fi
 shift
 args=""
-import='java.util java.text java.io java.util.regex'
+import='java.util java.text java.io java.util.regex java.time'
 static_import="java.lang.System java.util.Collections"
 
 os=`uname`

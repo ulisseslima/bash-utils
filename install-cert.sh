@@ -1,4 +1,5 @@
 #!/bin/bash -e
+# downloads and installs a certificate from a remote host. removes the existing one if wanted
 
 HOST=''
 PORT=443
@@ -38,6 +39,10 @@ do
 		shift
 		cacerts="$1"
 	;;
+	--help)
+                echo "e.g.:"
+		echo "$0 --host some.host --port 10443 --java-home $JAVA_HOME"
+        ;;
 	--cacerts-pass|--passwd)
 		shift
 		KEYSTOREPASS="$1"
@@ -45,7 +50,7 @@ do
     --check)
 	  	just_check=true
     ;;
-    -*) 
+    -*)
       	echo "bad option '$1'"
     ;;
     esac
