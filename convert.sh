@@ -9,8 +9,8 @@ convert_to_mp3() {
 }
 
 convert_all_to_mp3() {
-	for f in *.flac 
-	do 
+	for f in *.flac
+	do
 		convert_to_mp3 "$f"
 	done
 }
@@ -18,7 +18,7 @@ convert_all_to_mp3() {
 convert_to_utf8() {
 	f="$1"
 	destination="${2:-$f}"
-	
+
 	require.sh -f "$f"
 
 	encoding=$(check_encoding "$f")
@@ -30,6 +30,25 @@ convert_to_utf8() {
 	fi
 
 	echo $encoding
+}
+
+convert_encoding() {
+	to_encoding="${1^^}"
+        f="$2"
+        destination="${3:-$f}"
+
+        require.sh -f "$f"
+
+        encoding=$(check_encoding "$f")
+	encoding=${encoding^^}
+        if [[ "$encoding" != ${to_encoding} && "${encoding}" != *ASCII* && "$encoding" != BINARY ]]; then
+                iconv -f $encoding -t $encoding//TRANSLIT "$f" -o /tmp/f
+                mv /tmp/f $destination
+        elif [[ "$f" != "$destination" ]]; then
+                mv "$f" "$destination"
+        fi
+
+        echo $encoding
 }
 
 check_encoding() {
