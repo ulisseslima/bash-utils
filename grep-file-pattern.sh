@@ -17,4 +17,4 @@ require fpattern "file pattern"
 require search "pattern to search for"
 require dstart "start directory"
 
-grep -r --include=$fpattern "$search" "$dstart"
+grep -r --color --include=$fpattern "$search" "$dstart"
