@@ -9,24 +9,32 @@ source $(real require.sh)
 
 parse() {
     outf="$1"
-    cat "$outf" | jq -r .data.output | tr -d '"'
+    parsed=$(cat "$outf" | jq -r .data.output | tr -d '"')
+    
+    if [[ -z "$parsed" ]]; then
+        >&2 echo "couldn't parse: $(cat $outf)"
+        return 1
+    fi
+    echo "$parsed"
 }
 
 capitalize() {
     local title="$1"
 
-    curl --request GET \
-    --url "https://capitalize-my-title.p.rapidapi.com/title/ap/title-case/$title" \
+    curl -s --request GET \
+    --url "https://capitalize-my-title.p.rapidapi.com/title/apa/title-case/$title" \
     --header 'X-RapidAPI-Host: capitalize-my-title.p.rapidapi.com' \
     --header "X-RapidAPI-Key: $CMT_API_KEY"
 }
-
-require CMT_API_KEY "Capitalize my title API key"
 
 cache=/tmp/$ME
 mkdir -p $cache
 
 title="$1"
+
+require CMT_API_KEY "Capitalize my title API key"
+require title
+
 cachef="$cache/${title,,}"
 
 if [[ -f "$cachef" ]]; then
@@ -36,5 +44,17 @@ if [[ -f "$cachef" ]]; then
 fi
 
 title=$(capitalize "$title")
+while [[ "$title" == *'You have exceeded the rate limit per second for your plan'* ]]
+do
+    >&2 echo "`date` - ERR: $title"
+    sleep 1
+    title=$(capitalize "$title")
+done
+
+if [[ -z "$title" ]]; then
+    >&2 echo "empty response"
+    exit 1
+fi
+
 echo "$title" > "$cachef"
 parse "$cachef"
