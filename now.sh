@@ -11,6 +11,9 @@ case "$format" in
         YEAR|-y|--year)
                 df="%Y"
         ;;
+        MDATE|-md|--month-date)
+                df="%Y-%m"
+        ;;
         DATE|-d|--date)
                 df="%Y-%m-%d"
         ;;
