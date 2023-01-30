@@ -4,6 +4,7 @@ MYDIR="${MYSELF%/*}"
 ME=$(basename $MYSELF)
 
 source $MYDIR/log.sh
+source $(real require.sh)
 
 trap 'catch $? $LINENO' ERR
 catch() {
@@ -29,7 +30,7 @@ line_no=0
 count=0
 
 words=50
-dictionary=''
+dictionary=$DEFAULT_DICTIONARY
 wpl=10
 paragraph=10
 
@@ -74,7 +75,7 @@ do
     shift
 done
 
-require.sh "$dictionary" "a dictionary file is required. a dictionary should contain one word per line. specify with -d"
+require dictionary "a dictionary file is required. a dictionary should contain one word per line. specify with -d"
 
 while true
 do
