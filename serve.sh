@@ -2,6 +2,7 @@
 
 dir="${1:-.}"
 port="${2:-8666}"
+cert="$3"
 
 server="$(which http-server)"
 if [ ! -f "$server" ]; then
@@ -14,4 +15,8 @@ fi
 echo "serving '$dir'"
 
 # alternatively httpserv
-http-server "$dir" -p $port
+if [[ -f "$cert" ]]; then
+  http-server "$dir" -p $port -S -C "$cert"
+else
+  http-server "$dir" -p $port
+fi
