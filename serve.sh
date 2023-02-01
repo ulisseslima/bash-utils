@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# https://www.npmjs.com/package/http-server
 dir="${1:-.}"
 port="${2:-8666}"
 cert="$3"
@@ -16,7 +16,7 @@ echo "serving '$dir'"
 
 # alternatively httpserv
 if [[ -f "$cert" ]]; then
-  http-server "$dir" -p $port -S -C "$cert"
+  http-server "$dir" -p $port -S -C "$cert" --cors
 else
-  http-server "$dir" -p $port
+  http-server "$dir" -p $port --cors
 fi
