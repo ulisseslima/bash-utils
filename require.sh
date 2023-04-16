@@ -26,6 +26,12 @@ require() {
 			if [[ -z "$value" ]]; then
 				llog "required variable has no value: $keyname ($info)"
 				exit 1
+			elif [[ "$value" == null ]]; then
+				llog "required variable has no value: $keyname ($info)"
+				exit 1
+			elif [[ "$value" == undefined ]]; then
+				llog "required variable has no value: $keyname ($info)"
+				exit 1
 			fi
 		;;
 		--number|-n)
@@ -66,8 +72,13 @@ require() {
 			fi
 		;;
 		--file|-f)
-			if [ ! -f "$value" ]; then
+			if [[ ! -f "$value" ]]; then
 				llog "a required file was not found: '$value' (varname: $keyname) - $info"
+				exit 2
+			fi
+
+			if [[ ! -s "$value" ]]; then
+				llog "file must be non-empty: '$value' (varname: $keyname) - $info"
 				exit 2
 			fi
 		;;
