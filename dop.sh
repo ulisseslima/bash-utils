@@ -8,7 +8,6 @@ if [[ -n "$op" ]]; then
 	shift
 else
 	>&2 echo "enter date expression (e.g.: 2022-01-01 +days 30):"
-	read op
 fi
 
 require op
