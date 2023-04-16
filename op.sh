@@ -11,7 +11,7 @@ else
 	read op
 fi
 
-require -nx op
+require op 'math expression'
 
 psql="psql -U postgres"
 
@@ -22,6 +22,14 @@ do
 	shift
 	psql="$1"
     ;;
+    --round|-r)
+	round=2
+
+	if [[ -n "$2" && "$2" != -* ]]; then
+	  shift
+	  round="$1"
+	fi
+    ;;
     -*)
       echo "bad option '$1'"
     ;;
@@ -29,4 +37,8 @@ do
     shift
 done
 
-$psql -qAtX -c "select $op"
+if [[ -n "$round" ]]; then
+	$psql -qAtX -c "select round($op, $round)"
+else
+	$psql -qAtX -c "select $op"
+fi
