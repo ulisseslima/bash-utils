@@ -2,6 +2,9 @@
 format="$1"
 
 case "$format" in
+	--verbose|-v)
+		verbose=true
+	;;
         WEEKDAY|-w|--weekday)
                 df="%u"
         ;;
@@ -11,7 +14,7 @@ case "$format" in
         YEAR|-y|--year)
                 df="%Y"
         ;;
-        MDATE|-md|--month-date)
+        MDATE|-md|--month-date|-ym)
                 df="%Y-%m"
         ;;
         DATE|-d|--date)
@@ -42,3 +45,6 @@ case "$format" in
 esac
 
 date +"$df"
+if [[ "$verbose" == true ]]; then
+	echo "date +'$df'"
+fi

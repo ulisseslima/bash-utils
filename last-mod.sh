@@ -1,7 +1,7 @@
 #!/bin/bash
 
 file="$1"
-if [ ! -n "$file" ]; then
+if [[ -z "$file" ]]; then
 	echo "gives a time difference (in seconds) between the moment the command was run and the file was modified"
 	echo ""
 	echo "usage:"
