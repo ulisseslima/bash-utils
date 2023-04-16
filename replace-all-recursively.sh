@@ -10,25 +10,25 @@ while test $# -gt 0
 do
     case "$1" in
       --replace|-r)
-		shift
+	shift
         replace=$1
       ;;
       --with|-w)
-		shift
+	shift
         with=$1
       ;;
-      --verbose|-v) 
+      --verbose|-v)
         verbose=true
       ;;
       --preview)
-		sed="sed"
-		echo "preview mode enabled"
-	  ;;
-	  --pattern)
-		shift
-		pattern=$1
-	  ;;
-      --*) 
+	sed="sed"
+	echo "preview mode enabled"
+      ;;
+      --pattern)
+	shift
+	pattern=$1
+      ;;
+      -*)
       	echo "bad option '$1'"
       	exit 1
       ;;
