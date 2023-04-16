@@ -2,7 +2,16 @@
 
 in=/dev/stdin
 if [[ -n "$1" ]]; then
+  if [[ "$1" == -v ]]; then
+	verbose=true
+  else
 	in=$(real "$1")
+  fi
 fi
 
-printf "$(cat $in)" | xclip -sel clip
+
+contents=$(cat $in)
+printf "$contents" | xclip -sel clip
+if [[ "$verbose" == true ]]; then
+	echo "$contents => copied to clipboard"
+fi
