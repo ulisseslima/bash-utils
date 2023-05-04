@@ -81,6 +81,15 @@ require() {
 				llog "file must be non-empty: '$value' (varname: $keyname) - $info"
 				exit 2
 			fi
+
+			if [[ "$info" == -* ]]; then
+				format=$(echo "$info" | cut -d'-' -f2)
+				ff=$(file "$value")
+				if [[ "$ff" != *"$format"* ]]; then
+					llog "file must be of type '$format' but is '$ff'"
+					exit 3
+				fi
+			fi
 		;;
 		--dir|-d)
 			if [ ! -d "$value" ]; then
