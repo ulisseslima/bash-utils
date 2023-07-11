@@ -12,8 +12,9 @@ else
 fi
 
 require op 'math expression'
+require PSQL "psql connection string"
 
-psql="psql -U postgres"
+psql="$PSQL"
 
 while test $# -gt 0
 do
