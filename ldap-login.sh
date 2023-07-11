@@ -29,4 +29,5 @@ require user
 require pass
 require host
 
+echo ldapwhoami -vvv -h $host -p 389 -D "$user" -x -w "$pass"
 ldapwhoami -vvv -h $host -p 389 -D "$user" -x -w "$pass"
