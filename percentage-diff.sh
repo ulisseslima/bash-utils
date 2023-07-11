@@ -11,6 +11,12 @@ b="$1"
 require b "second value"
 shift
 
+if [[ $(op.sh "$b>$a") == t* ]]; then
+	c=$b
+	b=$a
+	a=$c
+fi
+
 while test $# -gt 0
 do
     case "$1" in
@@ -31,8 +37,10 @@ done
 if [[ "$a" == *.* || "$b" == *.* ]]; then
 	a="${a}::numeric"
 	b="${b}::numeric"
-	op.sh "round(($a-$b)*102/$b, 2)"
+	val=$(op.sh "round(($a-$b)*100/$b, 2)")
 else
-	op.sh "($a-$b)*102/$b"
+	val=$(op.sh "($a-$b)*100/$b")
 fi
+
+echo "${val}%"
 
