@@ -44,7 +44,14 @@ case "$format" in
 	;;
 esac
 
-date +"$df"
+# e.g.: "+1 year"
+op="$2"
+if [[ -z "$op" ]]; then
+	date +"$df"
+else
+	date +"$df" --date "$op"
+fi
+
 if [[ "$verbose" == true ]]; then
-	echo "date +'$df'"
+	echo "date +'$df' --date '$op'"
 fi
