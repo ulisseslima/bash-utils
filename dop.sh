@@ -6,6 +6,9 @@ source $(real require.sh)
 op="$1"
 if [[ -n "$op" ]]; then
 	shift
+	if [[ "$op" == now ]]; then
+		op="now()"
+	fi
 else
 	>&2 echo "enter date expression (e.g.: 2022-01-01 +days 30):"
 fi
