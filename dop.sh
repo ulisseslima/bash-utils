@@ -67,5 +67,5 @@ do
     shift
 done
 
-echo "select $op"
+>&2 echo "select $op"
 $psql -qAtX -c "select $op"
