@@ -52,6 +52,14 @@ do
         shift
         op="'${op}'::timestamp +interval '$1 years'"
     ;;
+    before)
+        shift
+        op="'${op}'::timestamp < '$1'"
+    ;;
+    after)
+        shift
+        op="'${op}'::timestamp > '$1'"
+    ;;
     -*)
       echo "bad option '$1'"
     ;;
@@ -59,4 +67,5 @@ do
     shift
 done
 
+echo "select $op"
 $psql -qAtX -c "select $op"
