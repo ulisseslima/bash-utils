@@ -25,7 +25,10 @@ else
 fi
 shift
 args=""
-import='java.util java.text java.io java.util.regex java.time'
+import='java.util java.text java.io java.util.regex'
+if [[ $(java-version.sh) -gt 7 ]]; then
+	import="$import java.time"
+fi
 static_import="java.lang.System java.util.Collections"
 
 os=`uname`
