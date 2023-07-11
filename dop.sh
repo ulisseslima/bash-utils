@@ -21,36 +21,36 @@ while test $# -gt 0
 do
     case "$1" in
     --connection|-c)
-	shift
-	psql="$1"
+        shift
+        psql="$1"
     ;;
     --verbose|-v|-d|--debug)
-	shift
-	psql="$1"
+        shift
+        psql="$1"
     ;;
     +minutes)
-	shift
-	op="'${op}'::timestamp +interval '$1 minutes'"
+        shift
+        op="'${op}'::timestamp +interval '$1 minutes'"
     ;;
     +hours)
-	shift
-	op="'${op}'::timestamp +interval '$1 hours'"
+        shift
+        op="'${op}'::timestamp +interval '$1 hours'"
     ;;
     +days)
-	shift
-	op="'${op}'::timestamp +interval '$1 days'"
+        shift
+        op="'${op}'::timestamp +interval '$1 days'"
     ;;
     +weeks)
-	shift
-	op="'${op}'::timestamp +interval '$1 weeks'"
+        shift
+        op="'${op}'::timestamp +interval '$1 weeks'"
     ;;
     +months)
-	shift
-	op="'${op}'::timestamp +interval '$1 months'"
+        shift
+        op="'${op}'::timestamp +interval '$1 months'"
     ;;
     +years)
-	shift
-	op="'${op}'::timestamp +interval '$1 years'"
+        shift
+        op="'${op}'::timestamp +interval '$1 years'"
     ;;
     -*)
       echo "bad option '$1'"
