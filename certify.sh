@@ -9,6 +9,7 @@ JKS=false
 CACERTS_PASS=changeit
 VALID_DAYS=3650
 JBOSS=""
+jinstall=false
 
 check_alias() {
 	if [[ ! -n "$ALIAS" ]]; then
@@ -63,8 +64,7 @@ do
         	JBOSS=$1
         ;;
         --install|-i)
-	        install_in_all_jres
-        	exit 0
+	        jinstall=true
         ;;
 		--*) echo "bad option $1"
 			exit 1
@@ -127,7 +127,9 @@ if [[ -n "$JBOSS" ]]; then
     echo "connector template for Jboss created in ~/cacerts/server.xml.snippet"
 fi
 
-install_in_all_jres
+if [[ $jinstall == true ]]; then
+	install_in_all_jres
+fi
 
 echo "testing alias conectivity..."
 ping -c 3 $ALIAS
