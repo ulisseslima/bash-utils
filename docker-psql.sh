@@ -6,6 +6,7 @@ ME=$(basename $MYSELF)
 
 user=postgres
 instance=postgres
+db=postgres
 
 while test $# -gt 0
 do
@@ -17,6 +18,10 @@ do
     -U|--user)
       shift
       user=$1
+    ;;
+    -d|--db)
+      shift
+      db=$1
     ;;
     -i|--instance)
       shift
@@ -51,4 +56,4 @@ else
 fi
 
 echo "connecting to container: $pg_container ..."
-docker exec -it $pg_container psql -U $user $extra
+docker exec -it $pg_container psql -U $user $db $extra
