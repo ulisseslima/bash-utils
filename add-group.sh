@@ -9,7 +9,7 @@ if [ $(getent group $group) ]; then
 else
     echo "group '$group' does not exist. create?"
     read confirmation
-    groupadd $group
+    sudo groupadd $group
 fi
 
 echo "adding '$user' to '$group'..."
