@@ -1,15 +1,18 @@
 #!/bin/bash -e
 
+source $(real require.sh)
+
 linkp=/usr/bin
 
 file="$1"
-if [ ! -n "$file" ]; then
+if [ -z "$file" ]; then
 	echo "$0: creates a symlink to any file in $linkp"
 	echo "first arg must be file to link"
 	echo "second arg is optional. if specified, changes the link name, otherwise uses original filename"
 	exit 1
 fi
 
+require -f file "file to link must exist"
 rfile=$(readlink -f "$file")
 
 if [ ! -f "$rfile" ]; then
