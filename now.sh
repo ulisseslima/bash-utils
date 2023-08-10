@@ -24,7 +24,7 @@ case "$format" in
                 df="%Y-%m-%d %H:%M:%S"
         ;;
         -f|--file)
-                df="%Y-%m-%d_%Hh%M"
+                df="%Y-%m-%d_%Hh%Mm%S"
         ;;
         T|TIME|-t|--time)
                 df="%H:%M:%S"
