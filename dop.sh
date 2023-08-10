@@ -10,7 +10,7 @@ if [[ -n "$op" ]]; then
 		op="now()"
 	fi
 else
-	>&2 echo "enter date expression (e.g.: 2022-01-01 +days 30):"
+	>&2 echo "enter date expression (e.g.: $(now.sh -d) +days 30):"
 fi
 
 require op
