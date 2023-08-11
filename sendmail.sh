@@ -1,4 +1,5 @@
 #!/bin/bash
+# https://github.com/ulisseslima/dvl-mail
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 
@@ -48,10 +49,10 @@ attach=""
 while test $# -gt 0
 do
     case "$1" in
-	--version)
-		echo "$0 v2.2"
-		exit 0
-	;;
+		--version)
+			echo "$0 v2.2"
+			exit 0
+		;;
         --verbose|--debug|-v)
         	verbose=true
         ;;
@@ -60,8 +61,8 @@ do
         	exit 0
         ;;
         --config)
-		say "--config arg must be specified as first arg"
-		exit 1
+			say "--config arg must be specified as first arg"
+			exit 1
         ;;
         --html)
         	shift
@@ -76,10 +77,10 @@ do
         	shift
         	ssl=$1
         ;;
-	--tls)
-		shift
-		tls=$1
-	;;
+		--tls)
+			shift
+			tls=$1
+		;;
         --from|-f)
         	shift
         	from=$1
@@ -106,18 +107,18 @@ do
         --message|-m)
         	shift
         	message="$1"
-		if [[ -f "$message" ]]; then
-			message=$(cat "$message")
-		fi
+			if [[ -f "$message" ]]; then
+				message=$(cat "$message")
+			fi
         ;;
-	--attach|-a)
-		shift
-		attach="$1"
-	;;
+		--attach|-a)
+			shift
+			attach="$1"
+		;;
         --*)
-		say "bad option $1"
-        	exit 1
-	;;
+			say "bad option $1"
+			exit 1
+		;;
     esac
     shift
 done
@@ -180,5 +181,6 @@ java -jar \
 -Dsubject="$subject" \
 -Dmessage="$message" \
 -Dattach="$attach" \
+-Ddebug="$verbose" \
 $MYDIR/sendmail.jar
 
