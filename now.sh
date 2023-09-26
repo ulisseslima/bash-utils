@@ -1,9 +1,12 @@
 #!/bin/bash
+
+verbose=false
 format="$1"
 
 case "$format" in
 	--verbose|-v)
 		verbose=true
+		shift; format="$1"
 	;;
         WEEKDAY|-w|--weekday)
                 df="%u"
