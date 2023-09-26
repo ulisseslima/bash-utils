@@ -6,4 +6,7 @@ source $(real require.sh)
 commit=$1
 require commit
 
+# note: if it fails, try specifying -m 1 before the commit hash
+# note: if "fatal: bad object", try git fetch
+git pull
 git cherry-pick $commit
