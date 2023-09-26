@@ -4,6 +4,7 @@ MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 ME=$(basename $MYSELF)
 
+verbose=false
 user=postgres
 instance=postgres
 db=postgres
@@ -14,6 +15,9 @@ do
     --help|-h)
       do_help
       exit 0
+    ;;
+    --verbose|-v)
+      verbose=true
     ;;
     -U|--user)
       shift
@@ -56,4 +60,7 @@ else
 fi
 
 echo "connecting to container: $pg_container ..."
+if [[ $verbose == true ]]; then
+    echo "docker exec -it $pg_container psql -U $user $db $extra"
+fi
 docker exec -it $pg_container psql -U $user $db $extra
