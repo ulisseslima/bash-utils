@@ -8,23 +8,30 @@ do_help() {
 
 file="$1"
 
-if [ ! -n "$file" ]; then
+if [[ ! -n "$file" ]]; then
   echo "first argument must be a file or directory"
   exit 1
 fi
 
-last=0
+sleep=60
 
+last=0
+speed=0
+written=0
 while true
 do
-  atual=$(du -s "$file")
-  echo "$atual"
+  actual=$(du -s "$file" | tr '\t' ' ' | cut -d' ' -f1)
+  diff=$(op.sh ${last}-${actual})
+  mb=$(op.sh "round($diff/1024.0, 2)")
 
-  if [ "$atual" == "$last" ]; then
+  printf "\r$(now.sh -dt) - $actual bytes ($mb mb per minute)"
+
+  if [ "$actual" == "$last" ]; then
+    echo "
+	- no change detected, exiting..."
     exit 0
   fi
 
-  last="$atual"
-
-  sleep 2
+  last="$actual"
+  sleep $sleep
 done
