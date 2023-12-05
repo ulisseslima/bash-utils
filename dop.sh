@@ -41,17 +41,33 @@ do
         shift
         op="'${op}'::timestamp +interval '$1 days'"
     ;;
+    -days)
+        shift
+        op="'${op}'::timestamp -interval '$1 days'"
+    ;;
     +weeks)
         shift
         op="'${op}'::timestamp +interval '$1 weeks'"
+    ;;
+    -weeks)
+        shift
+        op="'${op}'::timestamp -interval '$1 weeks'"
     ;;
     +months)
         shift
         op="'${op}'::timestamp +interval '$1 months'"
     ;;
+    -months)
+        shift
+        op="'${op}'::timestamp -interval '$1 months'"
+    ;;
     +years)
         shift
         op="'${op}'::timestamp +interval '$1 years'"
+    ;;
+    -years)
+        shift
+        op="'${op}'::timestamp -interval '$1 years'"
     ;;
     before)
         shift
