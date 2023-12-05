@@ -1,16 +1,14 @@
 #!/bin/bash
+# gets the lines from stdin matching the lexical range passed
 
-if [ ! -f "$1" ]; then
-	echo "first argument bust be an existing file"
-	exit 1
-fi
+source $(real require.sh)
 
-if [ ! -n "$2" ]; then
-	echo "line count:"
-	wc -l "$1"
+read -r input
 
-	echo "specify line range to print with arguments 2 and 3"
-	exit 0
-fi
+range_a="$1"
+require range_a
 
-awk "NR >= $2 && NR <= $3" "$1"
+range_b="$2"
+require range_b
+
+echo "$input" | awk "\$0 >= \"$range_a\" && \$0 <= \"$range_b\""
