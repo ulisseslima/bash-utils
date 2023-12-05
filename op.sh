@@ -39,7 +39,7 @@ do
 done
 
 if [[ -n "$round" ]]; then
-	$psql -qAtX -c "select round($op, $round)"
+	$psql -qAtX -c "select round($op, $round)" | cut -d'.' -f1
 else
 	$psql -qAtX -c "select $op"
 fi
