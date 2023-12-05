@@ -51,4 +51,8 @@ if [[ $verbose == true ]]; then
 	echo "find . -type f -iname '$pattern' -print0 | xargs -0 $sed -i \"s/$replace/$with/g\""
 fi
 
-find . -type f -iname "$pattern" -print0 | xargs -0 $sed "s/$replace/$with/g"
+if [[ "$replace" == *'/'* || "$with" == *'/'* ]]; then
+	find . -type f -iname "$pattern" -print0 | xargs -0 $sed "s|$replace|$with|g"
+else
+	find . -type f -iname "$pattern" -print0 | xargs -0 $sed "s/$replace/$with/g"
+fi
