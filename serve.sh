@@ -7,7 +7,7 @@ cert="$3"
 server="$(which http-server)"
 if [ ! -f "$server" ]; then
 	echo "node http-server not installed. installing..."
-	sudo npm install -g http-server
+	npm install -g http-server
 else
 	echo "using '$server'"
 fi
