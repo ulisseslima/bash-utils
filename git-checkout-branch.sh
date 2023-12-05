@@ -6,5 +6,6 @@ source $(real require.sh)
 branch=$1
 require branch
 
+git pull
 git fetch --all
 git switch $branch
