@@ -1,6 +1,11 @@
 #!/bin/bash
 source $(real require.sh)
 
+if [[ $# == 0 ]]; then
+  echo "usage example:"
+  echo "$0 -u username -d dbname -s schemaname -p desiredpass"
+fi
+
 while test $# -gt 0
 do
     case "$1" in
