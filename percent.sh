@@ -23,8 +23,16 @@ do
     --round)
         round=true
     ;;
+    --trunc-decimal|--no-decimal)
+        trunc=true
+    ;;
+    --round-trunc)
+        round=true
+        trunc=true
+    ;;
     -*)
         echo "bad option '$1'"
+        exit 1
     ;;
     esac
     shift
@@ -38,13 +46,17 @@ fi
 
 diff=$(cross-multiply.sh 100 $in $percent x)
 if [[ -z "$op" ]]; then
-    echo $diff
+    if [[ "$trunc" == true ]]; then
+        echo $diff | cut -d'.' -f1
+    else
+        echo $diff
+    fi
     exit 0
 fi
 
 value=$(echo "scale=2; ${in}${op}${diff}" | bc)
 if [[ $round == true ]]; then
-    round.sh $value
+    round.sh $value | cut -d'.' -f1
 else
     echo $value
 fi
