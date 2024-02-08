@@ -6,7 +6,7 @@ ME=$(basename $MYSELF)
 
 source $(real require.sh)
 
-rate=.1
+rate=.5
 tmpf="/tmp/progress-$(basename "$1").log"
 
 function shutdown() {
@@ -24,7 +24,10 @@ function do_wait() {
   local i=0
   while kill -0 $pid 2>/dev/null; do
     content=$(tail -n 1 "$tmpf")
-    printf "\r%s" "$content"
+    cpu_load=$(top -b -n 1 | head -1)
+    cpu_use=$(top -b -n 1 | tail -n +8 | awk '{print $1, $9, $12}' | head -1)
+
+    printf "\r%s | %s | %s" "$content" "$cpu_load" "$cpu_use"
     sleep $rate
   done
   
