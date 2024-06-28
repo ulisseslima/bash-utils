@@ -1,5 +1,6 @@
 #!/bin/bash
-# grep for a specific file pattern, recusrsively
+# grep for a specific file pattern, recursively
+# note: quoting the pattern is required
 
 source $(real require.sh)
 
