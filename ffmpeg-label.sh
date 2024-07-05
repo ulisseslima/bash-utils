@@ -49,6 +49,12 @@ do
       shift
       text="$1"
     ;;
+    --portrait)
+      orientation=portrait
+    ;;
+    --landscape)
+      orientation=landscape
+    ;;
     -*)
       err "bad option '$1'"
       exit 1
@@ -63,10 +69,12 @@ original_res=$(identify "$input" | cut -d' ' -f3)
 original_w=$(echo "$original_res" | cut -d'x' -f1)
 original_h=$(echo "$original_res" | cut -d'x' -f2)
 
-if [[ $original_h -gt $original_w ]]; then
-  orientation=portrait
-else
-  orientation=landscape
+if [[ -z "$orientation" ]]; then
+  if [[ $original_h -gt $original_w ]]; then
+    orientation=portrait
+  else
+    orientation=landscape
+  fi
 fi
 
 if [[ $orientation == landscape ]]; then
@@ -77,12 +85,11 @@ if [[ $orientation == landscape ]]; then
   convert "${redim}" -gravity center -crop x${height}+0+0 "${cropped}"
   rm "$redim"
 else
-  redim="${image_dir}/redim${height}p.${img_base}.png"
-  convert -resize x${height} "$input" "$redim"
-  # convert "$redim" -gravity center -crop ${width}x+0+0 "$image_dir"
-  cropped="${image_dir}/cropped${height}p.${img_base}.png"
-  convert "${redim}" -gravity center -crop ${width}x+0+0 "${cropped}"
-  rm "$redim"
+  redim="${image_dir}/redim${width}p.${img_base}.png"
+  convert -resize x${width} "$input" "$redim"
+  
+  cropped="${image_dir}/cropped${width}p.${img_base}.png"
+  convert "${redim}" -gravity $from -crop ${height}x+0+0 "${cropped}"
 fi
 
 labeled="${image_dir}/${img_base}%03d.png"
@@ -93,7 +100,8 @@ ffmpeg -i "${cropped}" \
 rm "$cropped"
 
 if [[ -z "$out" ]]; then
-  mv "${labeled/\%03d/001}" "$input"
+  mv "${labeled/\%03d/001}" "${image_dir}/${img_base}.png"
+  mv "$input" /tmp
 else
   mv "${labeled/\%03d/001}" "$out"
 fi
