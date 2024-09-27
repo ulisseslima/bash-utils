@@ -2,7 +2,7 @@
 
 source $(real require.sh)
 
-linkp='/usr/local/bin'
+linkp='/usr/bin'
 
 file="$1"
 if [ -z "$file" ]; then
