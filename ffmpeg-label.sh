@@ -77,31 +77,19 @@ if [[ -z "$orientation" ]]; then
   fi
 fi
 
-if [[ $orientation == landscape ]]; then
-  redim="${image_dir}/redim${width}p.${img_base}.png"
-  convert -resize ${width}x "$input" "$redim"
-
-  cropped="${image_dir}/cropped${width}p.${img_base}.png"
-  convert "${redim}" -gravity center -crop x${height}+0+0 "${cropped}"
-  rm "$redim"
-else
-  redim="${image_dir}/redim${width}p.${img_base}.png"
-  convert -resize x${width} "$input" "$redim"
-  
-  cropped="${image_dir}/cropped${width}p.${img_base}.png"
-  convert "${redim}" -gravity $from -crop ${height}x+0+0 "${cropped}"
-fi
+cropped="$(img-resize.sh "$input" --orientation $orientation)"
 
 labeled="${image_dir}/${img_base}%03d.png"
-ffmpeg -i "${cropped}" \
+ffmpeg -v 16 -i "${cropped}" \
 -vf "drawbox=x=0:y=ih-${box_size}:w=iw:h=${box_size}:color=white@0.5:t=fill, drawtext=text='$text':fontcolor=black:fontsize=${font_size}:x=(w-text_w)/2:y=h-${box_size}+((${box_size}-text_h)/2)" \
 "${labeled}"
 
 rm "$cropped"
 
 if [[ -z "$out" ]]; then
+  cp "$input" /tmp
   mv "${labeled/\%03d/001}" "${image_dir}/${img_base}.png"
-  mv "$input" /tmp
+  >&2 echo "image replaced"
 else
   mv "${labeled/\%03d/001}" "$out"
 fi
