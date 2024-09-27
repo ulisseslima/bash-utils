@@ -86,7 +86,15 @@ require() {
 				format=$(echo "$info" | cut -d'-' -f2)
 				ff=$(file "$value")
 				if [[ "$ff" != *"$format"* ]]; then
-					llog "file must be of type '$format' but is '$ff'"
+					llog "file must be of type '$format' but was '$ff'"
+					if [[ "$ff" == *'text'* ]]; then
+						llog "dump:"
+						>&2 cat "$value"
+					else
+						llog "size:"
+						>&2 du -sh "$value"
+					fi
+					rm -f "$value"
 					exit 3
 				fi
 			fi
