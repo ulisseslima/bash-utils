@@ -2,9 +2,18 @@
 # https://stackoverflow.com/questions/7334754/correct-way-to-check-java-version-from-bash-script/56243046#56243046
 
 source $(real require.sh)
+J8=52
 
-if [[ -n "$1" ]]; then
-	JAVA_HOME="$1"
+if [[ -d "$1" ]]; then
+	export JAVA_HOME="$1"
+elif [[ $(nan.sh "$1") == false ]]; then
+	#javad="JAVA${1}_HOME"
+	#export JAVA_HOME="${!javad}"
+	class_fversion=$1
+	java6=50
+	java50=6
+	difference="$(echo $(($class_fversion-$java6)) | tr -d '-')"
+	echo "$((java50+difference))"
 fi
 
 require -d JAVA_HOME
