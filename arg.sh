@@ -12,7 +12,7 @@ else
         or)
             echo "$fallback"
         ;;
-        *) 
+        *)
             echo "bad option '$type'"
         ;;
     esac
