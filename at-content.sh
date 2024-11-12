@@ -21,4 +21,14 @@ do
     shift
 done
 
-at -c $job_id | tail -2
+if [[ $full == true ]]; then
+	content=$(at -c $job_id | tail -2 | head -1)
+	script=$(echo "$content" | cut -d' ' -f1)
+	others=$(echo "$content" | cut -d' ' -f2-)
+	echo "$(basename $script) $others"
+else
+	content=$(at -c $job_id | tail -2 | head -1)
+	script=$(echo "$content" | cut -d' ' -f1)
+	others=$(echo "$content" | cut -d' ' -f2-)
+	echo "$(basename $script) $others"
+fi
