@@ -1,5 +1,6 @@
 #!/bin/bash
-# pops a random line from a file'
+# pops a random line from a file
+# optionally filters before popping
 
 in=/dev/stdin
 f="${1}"
@@ -7,8 +8,16 @@ if [[ -f "$f" ]]; then
 	in="$f"
 fi
 
+filter="$1"
+field=$2
+separator=${3:-,}
+
 contents="/tmp/contents"
-cat $in > $contents
+if [[ -n "$filter" ]]; then
+	cat $in | grep "$filter" > $contents
+else
+	cat $in > $contents
+fi
 
 n=$(cat "$contents" | wc -l)
 if [[ "$n" -lt 1 ]]; then
@@ -19,4 +28,8 @@ fi
 random=$(((RANDOM % $n) +1))
 word=$(cat "$contents" | head -$random | tail -1)
 
-echo $word
+if [[ -n "$field" ]]; then
+	echo "$word" | cut -d"${separator}" -f${field}
+else
+	echo $word
+fi
