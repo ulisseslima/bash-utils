@@ -2,7 +2,8 @@
 # tests a if a required variable name is not empty, just source this script into yours
 
 function llog() {
-	>&2 echo "$@"
+        local caller=$(basename $0)
+	>&2 echo "${caller}: $@"
 }
 
 require() {
