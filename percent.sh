@@ -1,24 +1,43 @@
 #!/bin/bash
 # returns the percentage of a value
+# e.g.: $0 100 10 # yields 10
 # optionally, runs a math operation
+# e.g.: $0 100 10 --op '+' # adds 10% to 100
 
+source $(real require.sh)
 in="$1"
-shift
-percent=$1
-shift
+require -n in
 
+if [[ -t 0 ]]; then
+  shift
+  percent="$1"
+  shift
+else
+  percent=$(cat /dev/stdin)
+fi
+
+require percent 'percent as arg2 or stdin'
+percent=$(echo "$percent" | tr -d '%')
+
+verbose=false
 op=
 round=false
 
 while test $# -gt 0
 do
     case "$1" in
-    --verbose|-v)
+    --verbose|-v|--debug)
         verbose=true
     ;;
     --op)
         shift
         op="$1"
+    ;;
+    --add)
+        op="+"
+    ;;
+    --decrease)
+        op="-"
     ;;
     --round)
         round=true
@@ -52,6 +71,10 @@ if [[ -z "$op" ]]; then
         echo $diff
     fi
     exit 0
+fi
+
+if [[ $verbose == true ]]; then
+	>&2 echo "# ${in}${op}${diff} (${op}${percent}%)"
 fi
 
 value=$(echo "scale=2; ${in}${op}${diff}" | bc)
