@@ -1,12 +1,16 @@
 #!/bin/bash
+MYSELF="$(readlink -f "$0")"
+MYDIR="${MYSELF%/*}"
+ME=$(basename $MYSELF)
 
 # Check if an input file is provided
 if [[ ! -f "$1" ]]; then
-  echo "Usage: $0 [input_file]"
+  echo "Usage: $ME [input_file]"
   exit 1
 fi
 
 max_characters_per_line=${2:-22}
+>&2 echo "$ME - page width: $max_characters_per_line"
 
 # Read input file and wrap lines
 while read -r line; do
@@ -18,7 +22,7 @@ while read -r line; do
       # no spaces (word too long) or space too late
       echo "${line:0:$max_characters_per_line}-"
       line="${line:$max_characters_per_line}"
-    else  
+    else
       # Output the first part of the line (up to the wrap index)
       echo "${line:0:$wrap_index}"
       # Remove the first part of the line (up to the wrap index)
