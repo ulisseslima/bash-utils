@@ -1,4 +1,5 @@
 #!/bin/bash
+# general logging functionality
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 ME=$(basename $MYSELF)
