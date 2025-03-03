@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# removes useless stacktrace lines from common sources like org.*
 source $(real require.sh)
 
 logf="$1"
@@ -16,3 +16,5 @@ cat "$logf.2" | grep -v 'at java' > "$logf.3"
 
 info "size after: $(du -sh $logf.3)"
 readlink -f "$logf.3"
+
+rm "$logf.2" "$logf.1"
