@@ -17,8 +17,9 @@ if [ ! -n "$msg" ]; then
 	exit 1
 fi
 
-info "last 5 tags:"
-git tag | sort --version-sort | tail -5
+vbranch=$(echo "${v}" | rev | cut -d'.' -f2- | rev)
+info "last 5 tags for ${vbranch}:"
+git tag | sort --version-sort | grep "${vbranch}" | tail -5
 
 if [[ $(git tag -l $v) ]]; then
 	err "tag '$v' already exists, continue anyway? (ctrl+c to abort, any key to skip tag)"
