@@ -16,25 +16,31 @@ debug() {
 	fi
 }
 
+# local app port
 port=8080
+
+# exposed address mode
 mode=http
 
 while test $# -gt 0
 do
     case "$1" in
-        --verbose|-v|--debug) 
+        --verbose|-v|--debug)
         	verbose=true
         ;;
-        --port|-p)
-			shift
-        	shift=$1
+	--http|-k)
+		mode=http
         ;;
-		--https|-s)
-			mode=https
+	--https|-s)
+		mode=https
+        ;;
+        --port|-p)
+		shift
+        	shift=$1
         ;;
         -*) echo "bad option $1"
         	exit 1
-	    ;;
+	;;
     esac
     shift
 done
