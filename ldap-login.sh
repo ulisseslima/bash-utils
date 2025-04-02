@@ -16,7 +16,7 @@ do
     ;;
     --host|-h)
       shift
-      host="$1"
+      host="$1" # include port if not 389
     ;;
     -*)
       echo "bad option '$1'"
@@ -29,5 +29,6 @@ require user
 require pass
 require host
 
-echo ldapwhoami -vvv -h $host -p 389 -D "$user" -x -w "$pass"
-ldapwhoami -vvv -h $host -p 389 -D "$user" -x -w "$pass"
+#echo ldapwhoami -vvv -h $host -p 389 -D "$user" -x -w "$pass"
+#ldapwhoami -vvv -h $host -p 389 -D "$user" -x -w "$pass"
+ldapwhoami -vvv -H "ldap://${host}" -D "$user" -x -w "$pass"

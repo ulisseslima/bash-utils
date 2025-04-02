@@ -1,6 +1,11 @@
 #!/bin/bash
 # performs a search on an ldap server
 
+# examples:
+# ldap-search.sh -h ldap.host -u cn=Manager,o=corp -q uid=username,ou=People,o=corp
+# ldap-search.sh -h ldap.host -u cn=Manager,o=corp -q ou=Groups,o=corp
+# ldapsearch -D "cn=Manager,o=corp" -w passw -H 'ldap://ldap.host:389' -b "o=corp" -s sub -x "(objectclass=*)"
+
 source $(real require.sh)
 
 while test $# -gt 0
@@ -20,6 +25,7 @@ do
     ;;
     --host|-h)
       shift
+      # if not using default port, specify host:port
       host="$1"
     ;;
     -*)
@@ -33,8 +39,11 @@ require host
 require query
 
 if [[ -z "$user" ]]; then
-	ldapsearch -x -LLL -h $host -b "$query"
+	ldapsearch -x -LLL -H "ldap://${host}" -b "$query"
 else
-	require pass
-	ldapsearch -x -LLL -h $host -D "$user" -w "$pass" -b "$query"
+	if [[ -z "$pass" ]]; then
+		ldapsearch -x -LLL -H "ldap://${host}" -D "$user" -W -b "$query"
+	else
+		ldapsearch -x -LLL -H "ldap://${host}" -D "$user" -w "$pass" -b "$query"
+	fi
 fi
