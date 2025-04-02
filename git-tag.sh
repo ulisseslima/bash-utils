@@ -18,7 +18,7 @@ if [ ! -n "$msg" ]; then
 fi
 
 info "last 5 tags:"
-git tag | tail -5
+git tag | sort --version-sort | tail -5
 
 if [[ $(git tag -l $v) ]]; then
 	err "tag '$v' already exists, continue anyway? (ctrl+c to abort, any key to skip tag)"

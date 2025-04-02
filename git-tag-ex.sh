@@ -35,7 +35,7 @@ if [[ -z "$version" ]]; then
 fi
 
 info "last 5 tags:"
-git tag | tail -5
+git tag | sort --version-sort | tail -5
 
 changes=$(grep-changelog.sh "$changelog" $version)
 
