@@ -14,8 +14,8 @@ fpattern="$1"
 search="$2"
 dstart="$3"
 
-require fpattern "file pattern"
-require search "pattern to search for"
-require dstart "start directory"
+require fpattern "file pattern"; shift
+require search "pattern to search for"; shift
+require dstart "start directory"; shift
 
-grep -r --color --include=$fpattern "$search" "$dstart"
+grep -r --color --include=$fpattern "$search" "$dstart" "$@"
