@@ -2,8 +2,8 @@
 
 debug() {
 	if [ "$verbose" == true ]; then
-        	echo "//# $1"
-        fi
+        echo "//# $1"
+    fi
 }
 
 if [ ! -n "$JAVA_HOME" ]; then
@@ -24,6 +24,7 @@ else
 	code="$1"
 fi
 shift
+
 args=""
 import='java.util java.text java.io java.util.regex'
 if [[ $(java-version.sh) -gt 7 ]]; then
@@ -95,19 +96,24 @@ debug() {
 while test $# -gt 0
 do
     case "$1" in
-        --verbose|-v) 
-        	verbose=true
-        	echo "verbose mode on"
-        	echo "$JAVA_HOME"
-        	java -version
-        ;;
+    --verbose|-v) 
+        verbose=true
+        echo "verbose mode on"
+        echo "$JAVA_HOME"
+        java -version
+    ;;
 	--debug|-d)
 		debug=true
 	;;
-        --help|-h)
-        	do_help
-        	exit 0
-        ;;
+    --help|-h)
+        do_help
+        exit 0
+    ;;
+    --load)
+        # load methods from file
+        methods="`cat $2`"
+        shift 2
+    ;;
 	--keep)
 		keep=true
 		shift
@@ -120,7 +126,7 @@ do
 		fi
 	;;
 	*)
-        	args=$args$1" "
+        args=$args$1" "
 	;;
     esac
     shift
@@ -149,6 +155,7 @@ public class $ClassName {
 			}}catch(IOException io){io.printStackTrace();}
 		if (!in) {$code}
 	}
+    ${methods}
 	public static double[] numbers(String[] a) {
 		if (a == null || a.length < 1) return null;
 		double[] n = new double[a.length];
