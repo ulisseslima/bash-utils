@@ -3,7 +3,7 @@
 # https://stackoverflow.com/questions/881092/how-to-merge-a-specific-commit-in-git
 source $(real require.sh)
 
-commit=$1
+commit="$1"
 require commit
 
 # note: if it fails, try specifying -m 1 before the commit hash
