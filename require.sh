@@ -2,8 +2,8 @@
 # tests a if a required variable name is not empty, just source this script into yours
 
 function llog() {
-        local caller=$(basename $0)
-	>&2 echo "${caller}: $@"
+    local caller=$(basename $0)
+	>&2 echo "${caller} -> require: $@"
 }
 
 require() {
@@ -19,7 +19,12 @@ require() {
 	fi
 
 	local keyname="$1"
-	local value="${!keyname}"
+	local value=undefined
+    # check if keyname is a valid variable name
+    if [[ "$keyname" != *-* ]]; then
+        value="${!keyname}"
+    fi
+
 	local info="$2"
 
 	case $switch in
@@ -91,6 +96,9 @@ require() {
 					if [[ "$ff" == *'text'* ]]; then
 						llog "dump:"
 						>&2 cat "$value"
+						if [[ -n "$3" ]]; then
+							llog "additional dump:$3"
+						fi
 					else
 						llog "size:"
 						>&2 du -sh "$value"
@@ -106,9 +114,21 @@ require() {
 				exit 3
 			fi
 		;;
+        --app)
+			# install $value package if not found
+            if ! command -v "$keyname" &> /dev/null; then
+                llog "required app not found: $keyname - installing it now..."
+                if ! sudo apt install -y "$keyname"; then
+                    llog "failed to install required app: $keyname"
+                    exit 6
+                fi
+
+                $keyname --version
+            fi
+		;;
 		# e.g.: require --any var_a var_b [var_c ...]
-                # at least one of the vars has to be set
-	        --any)
+        # at least one of the vars has to be set
+	    --any)
 			local vars=
 			local ok=false
 			while test $# -gt 0
