@@ -6,12 +6,17 @@ ME=$(basename $MYSELF)
 
 source $(real require.sh)
 
+wait=false
+
 while test $# -gt 0
 do
     case "$1" in
     --target|--with)
         shift
         target="$1"
+    ;;
+    --wait)
+        wait=true
     ;;
     -*)
         echo "bad option '$1'"
@@ -37,6 +42,10 @@ git checkout $current
 git merge $target
 if [[ $(git status | grep -ci 'Your branch is ahead' || true) -gt 0 ]]; then
     echo "detected $current ahead of $target, pushing changes"
+    if [[ $wait == true ]]; then
+	echo "< review changes, then press enter to push them >"
+	read confirmation
+    fi
     git push
 fi
 
