@@ -1,7 +1,7 @@
 #!/bin/bash
 
 tmp=tmp-unicode-escape.txt
-tmp_out=out-$tmp
+tmp_out=/tmp/out-$tmp
 
 text="$1"
 if [ ! -n "$text" ]; then
@@ -13,9 +13,9 @@ if [[ "$text" == '-d' ]]; then
 	text="$2"
 	echo "$text" | ascii2uni -a U -q
 else
-	echo "$text" > $tmp
-	native2ascii -encoding utf8 $tmp $tmp_out
+	echo "$text" > /tmp/$tmp
+	native2ascii -encoding utf8 /tmp/$tmp $tmp_out
 
 	cat $tmp_out
-	rm $tmp $tmp_out
+	rm /tmp/$tmp $tmp_out
 fi
