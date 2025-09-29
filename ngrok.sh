@@ -36,7 +36,7 @@ do
         ;;
         --port|-p)
 		shift
-        	shift=$1
+        	port=$1
         ;;
         -*) echo "bad option $1"
         	exit 1
