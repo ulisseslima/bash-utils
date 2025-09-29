@@ -1,5 +1,6 @@
 #!/bin/bash -e
 # downloads and installs a certificate from a remote host. removes the existing one if wanted
+# $0 -h host -p port
 # public logs: https://crt.sh/?q=google.com
 
 HOST=''

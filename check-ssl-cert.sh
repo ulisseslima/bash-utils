@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# https://www.sslshopper.com/ssl-checker.html#hostname=https://host.com
 site="$1"
 if [[ -z "$site" ]]; then
 	echo "arg1 must be site:port"
