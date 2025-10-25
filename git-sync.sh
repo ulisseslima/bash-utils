@@ -49,4 +49,4 @@ if [[ $(git status | grep -ci 'Your branch is ahead' || true) -gt 0 ]]; then
     git push
 fi
 
-echo "$current is synced with $target"
+echo "✅ $current is synced with $target"

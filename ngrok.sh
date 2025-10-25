@@ -1,5 +1,6 @@
 #!/bin/bash
 # https://dashboard.ngrok.com/get-started/setup/linux
+# # /home/ulisses/.config/ngrok/ngrok.yml
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
 verbose=false
