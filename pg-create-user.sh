@@ -34,9 +34,9 @@ done
 
 require user
 require database
-require schema
 require password
 
+if [[ -n "$schema" ]]; then
 echo "execute this while connected to the database you want access to:"
 echo "
 CREATE USER $user WITH PASSWORD '$password';
@@ -46,3 +46,12 @@ grant select, insert, update, delete on all tables in schema $schema to $user;
 grant usage, select, update on all sequences in schema $schema to $user;
 grant execute on all functions in schema $schema to $user;
 "
+else
+echo "
+CREATE USER $user WITH PASSWORD '$password';
+grant connect on database $database to $user;
+grant select, insert, update, delete on all tables to $user;
+grant usage, select, update on all sequences to $user;
+grant execute on all functions to $user;
+"
+fi
