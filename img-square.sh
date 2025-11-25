@@ -61,7 +61,7 @@ esac
 convert "$input_image" -crop ${crop_width}x${crop_height}+${crop_x}+${crop_y} +repage "$output_image"
 
 if [ $? -eq 0 ]; then
-  echo "Image cropped successfully! Saved as $output_image"
+  readlink -f "$output_image"
 else
   echo "Error: Failed to crop the image."
 fi

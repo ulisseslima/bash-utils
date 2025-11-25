@@ -1,7 +1,7 @@
 #!/bin/bash
 # merge images in a tile
 # https://stackoverflow.com/questions/20737061/merge-images-side-by-side-horizontally
-# ex: montage [0-4].png -tile 5x1 -geometry +0+0 out.png
+# ex: montage [0-4].png 5x1 result.png
 
 source $(real require.sh)
 
