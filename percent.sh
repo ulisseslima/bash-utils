@@ -1,6 +1,6 @@
 #!/bin/bash
 # returns the percentage of a value
-# e.g.: $0 100 10 # yields 10
+# e.g.: $0 100 10 # means 10% of 100, yields 10
 # optionally, runs a math operation
 # e.g.: $0 100 10 --op '+' # adds 10% to 100
 
