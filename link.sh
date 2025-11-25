@@ -42,6 +42,6 @@ fi
 
 echo "creating link for $rfile in $linkp as $link_name ..."
 
-chmod +x "$rfile" && sudo ln -s "$rfile" "$link"
+sudo chmod +x "$rfile" && sudo ln -s "$rfile" "$link"
 
 ls -la $(which "$link_name")
