@@ -1,6 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
+MYSELF="$(readlink -f "$0")"
+MYDIR="${MYSELF%/*}"
+ME=$(basename $MYSELF)
+
 # Merge two 9x16 images named like:
 #   9x16_${name}-${sequence}
 # into a single PNG named:
@@ -80,7 +84,7 @@ if [[ "$name1" != "$name2" ]]; then
   exit 3
 fi
 
-out="${dir1}/16x9_${name1}_001.png"
+out="${dir1}/16x9_${name1}_${seq2}.png"
 
 tmp=$(mktemp --suffix=.png)
 trap 'rm -f "$tmp"' EXIT
@@ -94,6 +98,8 @@ trap 'rm -f "$tmp"' EXIT
 mv -f "$tmp" "$out"
 
 # Print absolute path of result (consistent with img-montage.sh behavior)
-file "$(readlink -f "$out")"
+fout=$(readlink -f "$out")
+file "$fout"
+open.sh "$fout"
 
 exit 0
