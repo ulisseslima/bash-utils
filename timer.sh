@@ -137,7 +137,7 @@ cancel() {
 trap cancel INT TERM
 
 date
-notify-send "$(title_started)" "${MINUTES} minute(s)." || true
+#notify-send "$(title_started)" "${MINUTES} minute(s)." || true
 
 # Sleep using minute suffix so fractional minutes work (GNU sleep supports 'm')
 sleep "${MINUTES}m"
