@@ -13,6 +13,7 @@ elif [[ $(nan.sh "$1") == false ]]; then
 	java6=50
 	java50=6
 	difference="$(echo $(($class_fversion-$java6)) | tr -d '-')"
+	>&2 echo "java ${class_fversion}:"
 	echo "$((java50+difference))"
 fi
 
