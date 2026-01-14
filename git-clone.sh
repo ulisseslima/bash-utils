@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source $(real require.sh)
+
 show_help() {
     cat <<-EOF
-Usage: $(basename "$0") [--branch <branch>] [--dir <dir>] <repo>
+Usage: $(basename "$0") <repo> [--branch <branch>] [--dir <dir>]
 
 Options:
     -b, --branch <branch>   Clone specific branch (uses --single-branch)
@@ -11,6 +13,15 @@ Options:
     -h, --help              Show this help
 EOF
 }
+
+if [[ $# -lt 1 ]]; then
+    show_help
+    exit 1
+fi
+
+repo="$1"
+require repo "repository URL"
+shift
 
 branch=""
 dir=""
@@ -51,18 +62,6 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
-
-if [[ $# -lt 1 ]]; then
-    show_help
-    exit 1
-fi
-
-repo="$1"
-if [[ $# -gt 1 ]]; then
-    echo "Error: unexpected positional argument: ${2}" >&2
-    show_help
-    exit 1
-fi
 
 cmd=(git clone)
 if [[ -n "$branch" ]]; then
