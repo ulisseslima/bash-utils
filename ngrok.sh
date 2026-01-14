@@ -19,6 +19,7 @@ debug() {
 
 # local app port
 port=8080
+localmode=http
 
 # exposed address mode
 mode=http
@@ -35,6 +36,9 @@ do
 	--https|-s)
 		mode=https
         ;;
+	--local-https|-S)
+		localmode=https
+        ;;
         --port|-p)
 		shift
         	port=$1
@@ -46,4 +50,4 @@ do
     shift
 done
 
-ngrok $mode "http://localhost:$port"
+ngrok $mode "${localmode}://localhost:$port"
