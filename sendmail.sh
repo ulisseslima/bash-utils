@@ -9,7 +9,7 @@ do_help() {
 }
 
 say() {
-        echo "||| $0 - $1"
+        >&2 echo "||| $0 - $1"
 }
 
 debug() {
@@ -65,8 +65,7 @@ do
 			exit 1
         ;;
         --html)
-        	shift
-        	html=$1
+        	html=true
         ;;
         --server|-s)
         	shift
@@ -108,6 +107,7 @@ do
         	shift
         	message="$1"
 			if [[ -f "$message" ]]; then
+				say "reading message from file contents..."
 				message=$(cat "$message")
 			fi
         ;;
@@ -133,8 +133,6 @@ if [ $verbose == true ]; then
 	say "message '$message'"
 	say "password '$passw'"
 fi
-
-echo "$MYDIR"
 
 if [[ $(grep -c MultiPartEmail "$MYDIR/sendmail.jar") < 1 ]]; then
 	echo "jar does not have all necessary dependencies, please create it again"
