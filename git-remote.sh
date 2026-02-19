@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# A script to get the remote URL of a git repository, optionally for a specific branch and file.
 branch=$(git branch --show-current)
 origin="origin"
 f=''
