@@ -7,7 +7,8 @@ if [[ ! -f "$f" ]]; then
 	exit 1
 fi
 
-result="unique.err"
+fname=$(basename "$f")
+result="$(now.sh)_${fname}.unique.err"
 
 grep ERROR $f | cut -d' ' -f4- | sort -u > $result
 readlink -f "$result"
