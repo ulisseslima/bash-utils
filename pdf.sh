@@ -3,11 +3,12 @@
 
 show_help() {
   echo "creates a PDF from text."
-  echo "usage: echo text | pdf.sh [output.pdf] [--landscape]"
+  echo "usage: echo text | pdf.sh [output.pdf] [--landscape] [--headers]"
 }
 
 options=""
 out=""
+headers=false
 while test $# -gt 0; do
   case "$1" in
   --help|-h)
@@ -19,6 +20,9 @@ while test $# -gt 0; do
   ;;
   --landscape)
     options="$options --landscape"
+  ;;
+  --headers)
+    headers=true
   ;;
   -* )
     echo "bad option '$1'"
@@ -70,6 +74,7 @@ else
 fi
 
 # run enscript with chosen encoding, reading the selected file
+[ "$headers" = false ] && options="$options --no-header"
 enscript -v --encoding="$ens_encoding" $options -p "${fname}.ps" "$usefile"
 ps2pdf "${fname}.ps"
 
