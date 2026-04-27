@@ -12,7 +12,7 @@ require branch
 remote=${2:-false}
 
 echo "deleting branch locally..."
-git branch -d $branch
+git branch -d $branch || true
 
 if [[ "$remote" == true ]]; then
     echo "deleting branch remotely..."
