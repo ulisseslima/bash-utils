@@ -85,8 +85,37 @@ if [[ -z "$cacerts" ]]; then
 fi
 echo "# using cacerts=$cacerts"
 echo "# using KEYSTOREPASS=$KEYSTOREPASS"
+# determine whether we need to run keytool under sudo (if we can't write to the keystore)
+SUDO=""
+if [ -e "$cacerts" ]; then
+	if [ ! -w "$cacerts" ]; then
+		SUDO="sudo"
+	fi
+else
+	parentdir="$(dirname "$cacerts")"
+	if [ ! -w "$parentdir" ]; then
+		SUDO="sudo"
+	fi
+fi
 
-existing=$($kt -list -keystore "$cacerts" -storepass "$KEYSTOREPASS" | grep $HOST || true)
+if [ -n "$SUDO" ]; then
+	if ! command -v sudo >/dev/null 2>&1; then
+		echo "No write permission for $cacerts and sudo is not available; please run this script as a user who can write $cacerts or install sudo"
+		exit 1
+	fi
+	echo "# will use sudo for keystore operations"
+fi
+
+# helper to run keytool, optionally under sudo
+run_kt() {
+	if [ -n "$SUDO" ]; then
+		"$SUDO" "$kt" "$@"
+	else
+		"$kt" "$@"
+	fi
+}
+
+existing=$(run_kt -list -keystore "$cacerts" -storepass "$KEYSTOREPASS" 2>/dev/null | grep "$HOST" || true)
 if [[ "$existing" == *${HOST}* ]]; then
 	echo "a certificate for $HOST already exists, do you want to remove it? [Y/n]"
 	echo "$existing"
@@ -94,14 +123,14 @@ if [[ "$existing" == *${HOST}* ]]; then
 
 	if [[ "${remove,,}" != 'n' ]]; then
 		echo "removing certificate for $HOST"
-		$kt -delete -alias $HOST -keystore "$cacerts" -storepass "$KEYSTOREPASS" || true
+		run_kt -delete -alias "$HOST" -keystore "$cacerts" -storepass "$KEYSTOREPASS" || true
 	else
 		exit 0
 	fi
 fi
 
 if [[ "$just_check" == true ]]; then
-	$kt -list -keystore "$cacerts" -storepass $KEYSTOREPASS | grep $HOST
+	run_kt -list -keystore "$cacerts" -storepass "$KEYSTOREPASS" | grep "$HOST"
 	exit 0
 fi
 
@@ -120,10 +149,10 @@ if [[ -n "$HOST" ]]; then
 fi
 
 # create a keystore and import certificate
-$kt -import -noprompt -trustcacerts \
-    -alias ${HOST} -file $CERTF \
-    -keystore ${cacerts} -storepass ${KEYSTOREPASS}
+run_kt -import -noprompt -trustcacerts \
+	-alias "${HOST}" -file "$CERTF" \
+	-keystore "$cacerts" -storepass "$KEYSTOREPASS"
 
 echo ""
 echo "certificate details:"
-$kt -list -keystore "$cacerts" -storepass $KEYSTOREPASS | grep $HOST || true
+run_kt -list -keystore "$cacerts" -storepass "$KEYSTOREPASS" | grep "$HOST" || true
