@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 # delete branch locally and (optionally) remotely
 MYSELF="$(readlink -f "$0")"
 MYDIR="${MYSELF%/*}"
@@ -12,7 +12,17 @@ require branch
 remote=${2:-false}
 
 echo "deleting branch locally..."
-git branch -d $branch || true
+git branch -d $branch
+
+# if unable to delete locally, prompt user to force delete
+if [[ $? -ne 0 ]]; then
+	echo "unable to delete branch locally. force delete? (y/n)"
+	read confirmation
+	if [[ ${confirmation,,} == y* ]]; then
+		echo "force deleting branch locally..."
+		git branch -D $branch || true
+	fi
+fi
 
 if [[ "$remote" == true ]]; then
     echo "deleting branch remotely..."
