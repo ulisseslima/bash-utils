@@ -14,6 +14,7 @@ if [[ "$text" == '-d' ]]; then
 	echo "$text" | ascii2uni -a U -q
 else
 	echo "$text" > /tmp/$tmp
+	# install native2ascii from openjdk-8-jdk-headless
 	native2ascii -encoding utf8 /tmp/$tmp $tmp_out
 
 	cat $tmp_out

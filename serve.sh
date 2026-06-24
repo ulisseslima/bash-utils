@@ -1,5 +1,6 @@
 #!/bin/bash
 # https://www.npmjs.com/package/http-server
+# serves a directory to access from localhost
 dir="${1:-.}"
 port="${2:-8666}"
 cert="$3"
