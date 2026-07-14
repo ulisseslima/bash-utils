@@ -1,4 +1,5 @@
 #!/bin/bash
+# gets/sets a property from a property file
 source $(real log.sh)
 
 filename="$1"
